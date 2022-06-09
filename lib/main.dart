@@ -28,6 +28,8 @@ class AppState extends StatelessWidget {
     return MultiProvider(providers: [
       ChangeNotifierProvider(create: (_)=>AuthService()),
       ChangeNotifierProvider(create: (_)=>GeneralProvider()),
+      ChangeNotifierProvider(create: (_)=>AlimentosService()),
+       ChangeNotifierProvider(create: (_)=>DatosUserProvider()),
      
           
     ],
@@ -44,13 +46,20 @@ class Myapp extends StatelessWidget{
      return  MaterialApp(
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: NotificationsService.messengerKey,
-      initialRoute: 'checking',
+      initialRoute: 'bienvenida',
       routes: {
         'home':( _ ) => const HomeScreen(),
         'login': ( _ ) => const LoginScreen(),
         'setting':( _ ) => const SettingsScreen(),
         'registro':( _ ) => const RegistroScreen(),
         'checking':( _ )=> const CheckAuthScreen(),
+        'alimentos':( _ )=> const AlimentosScreen(),
+        'datosPersonales':( _ )=> const DatosPersonalesScreen(),
+        'datosMedidas':( _ )=> const DatosMedidasScreen(),
+        'bienvenida':( _ )=> const BienvenidaScreen(),
+        'datosDos':( _ )=> const DatosDosScreen(),
+        'datosTres':( _ )=> const DatosTresScreen(),
+
       },
       
 

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nutri_saludapp">
    <application
-        android:label="nutri_saludapp"
+        android:label="NutriSalud"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
