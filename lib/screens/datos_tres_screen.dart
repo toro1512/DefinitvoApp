@@ -11,7 +11,7 @@ class DatosTresScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final datosUserProvider = Provider.of<DatosUserProvider>(context);
+    final datosUserProvider = Provider.of<DatosUserProvider>(context);
     return  Scaffold(
         appBar: AppBar( 
         centerTitle:true,
@@ -34,14 +34,15 @@ class DatosTresScreen extends StatelessWidget {
         body: const BodyDatosTres(),
         floatingActionButton:  FloatingActionButton.extended(
           onPressed:() {
-            if(datosUserProvider.nombre.isEmpty){
-             ScaffoldMessenger.of(context).showSnackBar(
-                   const SnackBar(content: Text("Nombre VACIO")));
-           }
-           else{
-              Navigator.pushNamed(context, 'datosDos');
-           }
-          },
+                  if(datosUserProvider.isIMC)
+                  {
+                    Navigator.pushNamed(context, 'registro');
+                  }
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(
+                   const SnackBar(content: Text("Debe calcular el IMC")));
+                  }
+            },
           label:const Text("Siguiente (3/4)"),
           backgroundColor: Colors.lightGreen,)
     );
@@ -57,9 +58,8 @@ class BodyDatosTres extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final datosUserProvider = Provider.of<DatosUserProvider>(context);
-    final _peso = TextEditingController();
-    final _altura= TextEditingController();
-   
+    Color pintar= Colors.grey;
+         
     return SingleChildScrollView(
       child:Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
@@ -84,15 +84,11 @@ class BodyDatosTres extends StatelessWidget {
                     child: SizedBox(
                       height: 45,
                       child: TextFormField(
-                          
-                        onChanged: (value){
-                       
-                        },
-                        inputFormatters: [
+                         inputFormatters: [
                          FilteringTextInputFormatter.allow(RegExp(r'^(\d{0,3})?\.?\d{0,2}'))
                         ],
                         textAlign: TextAlign.center,
-                        controller:_peso,
+                        controller:datosUserProvider.pesoControl,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           
@@ -132,15 +128,11 @@ class BodyDatosTres extends StatelessWidget {
                     child: SizedBox(
                       height: 45,
                       child: TextFormField(
-                                     
-                        onChanged: (value){
-                         
-                        },
                         inputFormatters: [
                          FilteringTextInputFormatter.allow(RegExp(r'^(\d{0,3})?'))
                         ],
                         textAlign: TextAlign.center,
-                        controller:_altura,
+                        controller:datosUserProvider.alturaControl,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           isDense: true,
@@ -165,8 +157,23 @@ class BodyDatosTres extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            const Text("tu IMC es", style:  TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 16)),
-            const SizedBox(height: 15),
+           ElevatedButton(onPressed:(){
+            if(datosUserProvider.pesoControl.text.isNotEmpty && datosUserProvider.alturaControl.text.isNotEmpty && double.parse(datosUserProvider.alturaControl.text)>0 && double.parse(datosUserProvider.pesoControl.text)>0 )
+              {
+               datosUserProvider.imcP=calculadorImc(double.parse(datosUserProvider.alturaControl.text), double.parse(datosUserProvider.pesoControl.text), pintar);
+               datosUserProvider.isIMC=true;
+               
+              }
+             else{
+               ScaffoldMessenger.of(context).showSnackBar(
+                   const SnackBar(content: Text("Altura y Peso requeridos")));
+             } 
+           },
+           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppTheme.primary),) ,child: const Text("Calcular ICM")),
+           const SizedBox(height: 15),
+           const Text("tu IMC es", style:  TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 16)),
+           AutoSizeText(datosUserProvider.imcP, textAlign: TextAlign.end,style: TextStyle(color: pintar, fontWeight: FontWeight.bold, fontSize: 16), maxLines: 1,),
+           const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
               child: Row(
@@ -174,7 +181,7 @@ class BodyDatosTres extends StatelessWidget {
                   Expanded(flex: 1,
                   child:Padding(
                        padding: EdgeInsets.symmetric( horizontal: 8, vertical:0),
-                      child: AutoSizeText("Peso Bajo: ", textAlign: TextAlign.start,style:  TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 14), maxLines: 1,),
+                      child: AutoSizeText("Peso Bajo: ",textAlign: TextAlign.start,style:  TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 14), maxLines: 1,),
                     )),
                   Expanded(
                     flex:1,
@@ -197,7 +204,7 @@ class BodyDatosTres extends StatelessWidget {
                     flex:1,
                     child:Padding(
                       padding: EdgeInsets.symmetric( horizontal: 8, vertical:0),
-                      child: AutoSizeText(" IMC => 18.5 - 25.0", textAlign: TextAlign.start,style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12), maxLines: 1,),
+                      child: AutoSizeText(" IMC => 18.5 - 24.9", textAlign: TextAlign.start,style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12), maxLines: 1,),
                     )),
                 ],
               )),
@@ -227,5 +234,14 @@ class BodyDatosTres extends StatelessWidget {
     
     );
   }
+
+  String calculadorImc(double altura, double peso, Color pintar) {
+        double res=(peso/((altura/100)*(altura/100)));
+         return res.toStringAsFixed(1);
+
+  }
+
+
+
 }
 

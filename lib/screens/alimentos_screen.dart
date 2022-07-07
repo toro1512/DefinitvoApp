@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:nutri_saludapp/models/models.dart';
 import 'package:nutri_saludapp/providers/providers.dart';
@@ -115,7 +116,7 @@ class AlimentosScreen extends StatelessWidget {
                           child: 
                           const Center(
                             child: 
-                            Text('Lista de Alimentos a Cargar', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppTheme.primary),))),
+                            Text('Lista de Alimentos a Cargar', style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),))),
                         
 
                         ] 
@@ -126,30 +127,14 @@ class AlimentosScreen extends StatelessWidget {
             ),
              if(aux.isNotEmpty)
              ElevatedButton.icon(
-               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.red), shape:  MaterialStateProperty.all<OutlinedBorder>(const StadiumBorder())),
-               icon: const Icon(Icons.ac_unit_outlined), label: Text('Guardar el ' + _titulo, style: const TextStyle(fontSize: 16)),
+               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.lightGreen)),
+               icon: const Icon(Icons.save), label: const Text('Guardar', style: TextStyle(fontSize: 16)),
                onPressed: (){},
                ),
-             Stack(
-              children: <Widget>[
-                Text('Sugerencias Para el '+ _titulo,
-                    style: TextStyle(
-                    fontSize: 20,
-                    foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 2
-                    ..color = Colors.grey[700]!,
-                    ),
-                ),
-                Text('Sugerencias Para el '+ _titulo,
-                   style: TextStyle(
-                   fontSize: 20,
-                   color: Colors.grey[400],
-                   ),
-               ),
-             ],
-            ),  
-            
+               
+                const Text('Sugerencias',style: TextStyle(
+                   fontSize: 18,)),
+                          
              Padding(
                padding: const EdgeInsets.all(8.0),
                child: 
@@ -190,22 +175,24 @@ class _CuerpoSugerencias extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color=Colors.white;
+   
+    String rutaIcon='assets/PLATO A.svg';
+   
      switch (auxSuger[index].semaforo) {
-       case 1:
-         color=Colors.green.shade200;
+       case "1":
+         rutaIcon=auxSuger[index].file+' A.svg';
          break;
-        case 2:
-         color=Colors.yellow.shade200;
+        case "2":
+          rutaIcon=auxSuger[index].file+' B.svg';
          break;
-         case 3:
-         color=Colors.red.shade200;
+         case "3":
+          rutaIcon=auxSuger[index].file+' C.svg';
          break;   
      }
-    return Padding(
+     return Padding(
       padding: const EdgeInsets.all(2),
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: AppTheme.primary),borderRadius: BorderRadius.circular(0), color: Colors.white),
+        decoration: BoxDecoration(border: Border.all(color: Colors.black),borderRadius: BorderRadius.circular(0), color: Colors.grey[200]),
         child: ListTile(
           onTap: () => Navigator.pushNamed(context, 'detalleAli', arguments: auxSuger[index]),
           contentPadding: const EdgeInsets.only(left: 5,right: 2,top: 2,bottom: 2),
@@ -213,25 +200,17 @@ class _CuerpoSugerencias extends StatelessWidget {
           title:  Stack(
               children: <Widget>[
                 Text(auxSuger[index].nombre,
-                    style: TextStyle(
+                    style: const TextStyle(
                     fontSize: 14,
-                    foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 1
-                    ..color =color,
+                   
                     ),
                 ),
-                Text(auxSuger[index].nombre,
-                   style: TextStyle(
-                   fontSize: 14,
-                   color: color,
-                   ),
-               ),
+                
              ],
             ),  
           //Text(auxSuger[index].nombre,style: TextStyle(color: color),maxLines: 1,overflow: TextOverflow.ellipsis,  ),
-          subtitle: Text('cal: '+auxSuger[index].calorias.toString()+' grs: '+auxSuger[index].grasas.toString()+' pro: '+auxSuger[index].proteina.toString() +' car: '+auxSuger[index].carbohidrato.toString() , style: const TextStyle(fontSize: 10)),
-          leading: const Icon(Icons.dinner_dining_rounded, color:Colors.red, size:40),
+          subtitle: Text('cal: '+auxSuger[index].calorias.toString()+'; pro: '+auxSuger[index].proteina.toString() +'; car: '+auxSuger[index].carbohidrato.toString()+'; lips: '+auxSuger[index].lipids.toString() , style: const TextStyle(fontSize: 10)),
+          leading:SvgPicture.asset(rutaIcon,height: 40, width: 40,),
           trailing: IconButton( 
             padding: const EdgeInsets.only(right: 3),
             alignment: Alignment.centerRight,
@@ -258,21 +237,22 @@ class _CuerpoListBuil extends StatelessWidget {
   final List<Alimentos> aux;
   final int index;
   final GeneralProvider generalProvider;
-
+ 
   
 
   @override
   Widget build(BuildContext context) {
-    Color color=Colors.white;
-     switch (aux[index].semaforo) {
-       case 1:
-         color=Colors.green.shade200;
+  
+  String rutaFile="";
+   switch (aux[index].semaforo) {
+       case "1":
+          rutaFile=aux[index].file+' A.svg';
          break;
-        case 2:
-         color=Colors.yellow.shade200;
-         break;
-         case 3:
-         color=Colors.red.shade200;
+       case "2":
+         rutaFile=aux[index].file+' B.svg';
+        break;
+       case "3":
+          rutaFile=aux[index].file+' C.svg';
          break;   
      }
     return Padding(
@@ -286,14 +266,14 @@ class _CuerpoListBuil extends StatelessWidget {
           generalProvider.borrarAlimento(index, true);        
         },
         child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: color),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
           child: ListTile(
              onTap: () => Navigator.pushNamed(context, 'detalleAli', arguments: aux[index]),
             contentPadding:const EdgeInsets.only(left: 5,right: 2,top: 2,bottom: 2),
             dense: true,
             title: Text(aux[index].nombre,style: const TextStyle(fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,),
            // subtitle: Text('cal: '+auxSuger[index].calorias.toString()+' grs: '+auxSuger[index].grasas.toString()+' pro: '+auxSuger[index].proteina.toString() +' car: '+auxSuger[index].carbohidrato.toString() , style: TextStyle(fontSize: 10)),
-            leading: const Icon(Icons.dining_rounded, color:Colors.red, size:40),
+            leading: SvgPicture.asset(rutaFile,height: 40, width: 40,),
             trailing: IconButton( 
               padding: const EdgeInsets.only(right: 3),
             alignment: Alignment.centerRight,

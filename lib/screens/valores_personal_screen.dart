@@ -1,0 +1,150 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:nutri_saludapp/screens/screens.dart';
+import 'package:nutri_saludapp/themes/app_theme.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+
+class ValoresPersonalesScreen extends StatelessWidget {
+  const ValoresPersonalesScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List <String> valores=["Presión arterial","Glucosa en la sangre", "Medidas"];
+     
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppTheme.primary,
+        centerTitle: true,
+        title: SvgPicture.asset("assets/NUTRISALUD-NS.svg", width: 150,color: Colors.white,),
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+         child:Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+        child:  Column(
+          children: [
+           const SizedBox(height: 20),
+           const FechaValores(),
+           const SizedBox(height: 20),
+           Container(
+            
+            width: double.infinity,
+            child: Column(
+              children: [
+                const Center(child: AutoSizeText('Valores Control',style: TextStyle(fontSize: 20))),
+                ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder:(context, index) => ListTile(
+                  trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                  leading: const Icon(Icons.mediation),
+                  title:  Text(valores[index]), ),
+                  separatorBuilder:((_,__)=> const Divider()), 
+                  itemCount: valores.length-1
+                  )
+              ],
+            )
+            ),
+           const SizedBox(height: 10),
+           Container(
+            color: Colors.amber,
+            width: double.infinity,
+            child:  Column(
+              children: [
+                const Center(child:AutoSizeText('Medidas Fisicas',style: TextStyle(fontSize: 20))),
+                ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder:(context, index) => ListTile(
+                  trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                   onTap:(){
+                     Navigator.of(context).push(
+                     MaterialPageRoute(builder: (context)=> const ValoresScreen()),);},
+                  leading: const Icon(Icons.mediation),
+                  title:  Text(valores[2]), ),
+                  separatorBuilder:((_,__)=> const Divider()), 
+                  itemCount: 1
+               )
+              ],
+            )),
+           
+             
+          ],
+        )
+        )
+
+
+      ),
+    );
+     
+  }
+}
+class FechaValores extends StatefulWidget {
+  const FechaValores({Key? key}) : super(key: key);
+
+  @override
+  _FechaValoresState createState() => _FechaValoresState();
+}
+
+class _FechaValoresState extends State<FechaValores> {
+  @override
+void initState() {
+  super.initState();
+   initializeDateFormatting();
+  
+}
+  DateTime currentDate = DateTime.now();
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2030));
+    if (pickedDate != null && pickedDate != currentDate) {
+  
+      setState(() {
+        currentDate = pickedDate;
+      });
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+  return 
+  PhysicalModel(
+  color: Colors.white,
+ 
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+    
+     Flexible(
+       flex: 5,
+       fit: FlexFit.tight,
+       child: Padding(
+         padding: const EdgeInsets.all(8.0),
+         child: AutoSizeText(DateFormat('EEEE, d  MMMM  ''yyyy','es_ES').format(currentDate),
+         style: const TextStyle(fontSize: 22, ), maxLines: 1, textAlign:TextAlign.center
+         ),
+       ),
+     ),
+     Flexible(
+       flex: 1,
+       fit: FlexFit.tight,
+       child: IconButton(
+             onPressed: () => _selectDate(context),
+             icon:  SvgPicture.asset("assets/DATE.svg",
+            height: 30,
+            width: 30,
+            color: Colors.lightGreen
+            ),
+           ),
+     ),],
+       
+       
+       ),
+        );
+  }
+}
+
+

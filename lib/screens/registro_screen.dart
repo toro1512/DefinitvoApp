@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nutri_saludapp/providers/providers.dart';
 import 'package:nutri_saludapp/services/services.dart';
 import 'package:nutri_saludapp/ui/input_decoration.dart';
@@ -50,10 +51,12 @@ class _FormLogin extends StatelessWidget {
   const _FormLogin({
     Key? key,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+     const storage = FlutterSecureStorage();
      final loginForm = Provider.of<LoginFormProvider>(context);
+     final datosUsProvider = Provider.of<DatosUserProvider>(context);
+
     return Container (
       padding: const EdgeInsets.all(5),
       child: Form(
@@ -105,7 +108,7 @@ class _FormLogin extends StatelessWidget {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               disabledColor: Colors.grey,
               elevation: 0,
-              color: Colors.deepPurple,
+              color: Colors.lightGreen,
               child: Container(
                 padding: const EdgeInsets.symmetric( horizontal: 40, vertical: 15),
                 child: Text(
@@ -123,16 +126,23 @@ class _FormLogin extends StatelessWidget {
 
                 loginForm.isLoading=true;
                 
-                final String? errorMes= await authServ.createrUser(loginForm.email, loginForm.password);
+                final String? errorMes= await authServ.createrLogin(loginForm.email, loginForm.password);
                 
-                if(errorMes == null){
+                if(errorMes == "registro exitoso"){
+                  final String? cargaUsuari=await authServ.createUsuario( loginForm.email , datosUsProvider.nombre, datosUsProvider.fecha, datosUsProvider.sexo);
+                 
+                 if(cargaUsuari=="registro exitoso")
+                 {
+                  await storage.write(key: 'inicio', value: "Creado");
+
                   ScaffoldMessenger.of(context).showSnackBar(
-                   const SnackBar(content: Text("Bienvenido")));
+                  const SnackBar(content: Text("Bienvenido")));
                   Navigator.pushReplacementNamed(context, 'home');
+                 }
                 }
                 else{
-                  ScaffoldMessenger.of(context).showSnackBar(
-                   SnackBar(content: Text(errorMes)));
+                   ScaffoldMessenger.of(context).showSnackBar(
+                   SnackBar(content: Text(errorMes!)));
                    loginForm.isLoading=false;
                 }
                              

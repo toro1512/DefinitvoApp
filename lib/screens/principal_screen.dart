@@ -1,10 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:nutri_saludapp/providers/providers.dart';
 import 'package:nutri_saludapp/screens/screens.dart';
+import 'package:nutri_saludapp/services/services.dart';
+import 'package:nutri_saludapp/themes/app_theme.dart';
 import 'package:nutri_saludapp/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 
 class PrincipalScreen extends StatelessWidget {
@@ -13,13 +18,13 @@ class PrincipalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
+     
     return Scaffold(
       appBar: AppBar( 
-        backgroundColor:const Color.fromRGBO(234, 24, 77, 1),
-        toolbarHeight: 60,
+        backgroundColor: AppTheme.primary,
         centerTitle: true,
-        title: SvgPicture.asset("assets/title.svg", fit: BoxFit.cover, height: 40,),
+        title: SvgPicture.asset("assets/NUTRISALUD-NS.svg", width: 150,color: Colors.white,),
+        elevation: 0,
         actions: [
           PopupMenuButton<int>(
             shape: const RoundedRectangleBorder(
@@ -55,6 +60,7 @@ class PrincipalScreen extends StatelessWidget {
                 ),
                ),
               PopupMenuItem(
+              
                 value: 2,
                 child: Padding(
                   padding: const EdgeInsets.all(2),
@@ -85,6 +91,7 @@ class PrincipalScreen extends StatelessWidget {
 }
 
 void _onSelected(BuildContext context, int item) {
+   final authService = Provider.of<AuthService>(context, listen:false);
   
   switch(item){
 
@@ -94,10 +101,14 @@ void _onSelected(BuildContext context, int item) {
       );
       break;
      case 1:
-      Navigator.of(context).push(
+       break;
+      case 2:
+       authService.logout();
+        Navigator.of(context).push(
         MaterialPageRoute(builder: (context)=> const LoginScreen()),
       );
-      break;  
+      break;
+                 
   }
 
 }
@@ -108,6 +119,7 @@ class BodyHome extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+     final generalProvider=Provider.of<GeneralProvider>(context);
      final Size size= MediaQuery.of(context).size;
     
     return  SingleChildScrollView(
@@ -138,14 +150,14 @@ class BodyHome extends StatelessWidget {
              children: [
             
              const SizedBox(width:20), 
-             const AutoSizeText('2000  ',style: TextStyle(color: Colors.lightGreen, fontWeight: FontWeight.bold, fontSize: 16)),
+             AutoSizeText(generalProvider.caloriasCon.toString() + '  ',style: const TextStyle(color: Colors.lightGreen, fontWeight: FontWeight.bold, fontSize: 16)),
              Expanded(child: AutoSizeText('calorias consumidas el actual dia',style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.bold, fontSize:16),maxLines: 1)),
             ]),
             Row(
              
                children: [
                const SizedBox(width: 20,), 
-               const AutoSizeText('2000  ',style: TextStyle(color: Color.fromRGBO(234, 24, 77, 1), fontWeight: FontWeight.bold, fontSize: 16), textAlign: TextAlign.start,),
+                AutoSizeText(generalProvider.caloriasQue.toString() + '  ',style: const TextStyle(color: Color.fromRGBO(234, 24, 77, 1), fontWeight: FontWeight.bold, fontSize: 16), textAlign: TextAlign.start,),
                Expanded(child: AutoSizeText('calorias quemadas el actual dia',style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.bold, fontSize: 16),maxLines: 1)),
               ]),
             const SizedBox(height: 25),
@@ -297,6 +309,39 @@ void initState() {
         firstDate: DateTime(2015),
         lastDate: DateTime(2030));
     if (pickedDate != null && pickedDate != currentDate) {
+
+    final listaService = Provider.of<AlimentosDayService>(context, listen: false);
+    final generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+    const storage = FlutterSecureStorage();
+
+    
+    var formatter = DateFormat('yyyy-MM-dd');
+    String fecha = formatter.format(pickedDate);
+    String val=await storage.read(key: 'usuario') ?? '';
+    val="'"+val+"'/";
+    fecha='"'+fecha+'"';
+    val= val+fecha;
+    generalProvider.clearVectores();
+    generalProvider.alimentosDay.addAll(await listaService.searchAlimentos(val)); 
+    for(int i=0;i<generalProvider.alimentosDay.length;i++)
+    {
+      switch(generalProvider.alimentosDay[i].moment ) {
+
+      case 'Almuerzo':
+        generalProvider.almLisDay.add(generalProvider.alimentosDay[i]);
+        break;
+      case 'Cena': 
+          generalProvider.cenLisDay.add(generalProvider.alimentosDay[i]);
+        break;
+      case 'Desayuno': 
+         generalProvider.desLisDay.add(generalProvider.alimentosDay[i]);
+        break;
+      case 'Merienda': 
+          generalProvider.merLisDay.add(generalProvider.alimentosDay[i]);
+        break;
+   
+      }
+    }
       setState(() {
         currentDate = pickedDate;
       });
@@ -328,6 +373,7 @@ void initState() {
        child: IconButton(
              onPressed: () => _selectDate(context),
              icon:  SvgPicture.asset("assets/DATE.svg",
+             color: Colors.lightGreen,
             height: 30,
             width: 30,
             ),

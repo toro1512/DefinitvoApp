@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nutri_saludapp/themes/app_theme.dart';
 
 
 class InputDecorations {
@@ -11,12 +12,12 @@ class InputDecorations {
     return InputDecoration(
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.deepPurple
+            color: AppTheme.primary
           ),
         ),
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.deepPurple,
+            color: AppTheme.primary,
             width: 2
           )
         ),
@@ -26,7 +27,7 @@ class InputDecorations {
           color: Colors.grey
         ),
         prefixIcon: prefixIcon != null 
-          ? Icon( prefixIcon, color: Colors.deepPurple )
+          ? Icon( prefixIcon, color: AppTheme.primary)
           : null
       );
   }  

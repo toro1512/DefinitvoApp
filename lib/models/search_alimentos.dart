@@ -7,13 +7,13 @@ import 'package:nutri_saludapp/models/models.dart';
 
 class SearchAlimentos {
     SearchAlimentos({
-      required this.page,
-       required this.results,
+      required this.success,
+      required this.data,
        
     });
 
-     int page;
-    List<Alimentos> results;
+    int success;
+    List<Alimentos> data;
   
 
     factory SearchAlimentos.fromJson(String str) => SearchAlimentos.fromMap(json.decode(str));
@@ -21,14 +21,14 @@ class SearchAlimentos {
     String toJson() => json.encode(toMap());
 
     factory SearchAlimentos.fromMap(Map<String, dynamic> json) => SearchAlimentos(
-        page: json["page"],
-        results: List<Alimentos>.from(json["result"].map((x) => Alimentos.fromMap(x))),
+        success: json["success"],
+        data: List<Alimentos>.from(json["data"].map((x) => Alimentos.fromMap(x))),
        
     );
 
     Map<String, dynamic> toMap() => {
-        "page": page,
-        "results": List<dynamic>.from(results.map((x) => x.toMap())),
+        "page": success,
+        "data": List<dynamic>.from(data.map((x) => x.toMap())),
      
     };
 }

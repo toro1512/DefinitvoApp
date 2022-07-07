@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AuthBackground extends StatelessWidget {
 
@@ -39,8 +40,8 @@ class _HeaderIcon extends StatelessWidget {
     return SafeArea(
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.only(top: 10),
-        child: const Icon(Icons.person_pin, color: Colors.white, size: 100,),
+        margin: const EdgeInsets.only(top: 50),
+        child: SvgPicture.asset('assets/NUTRISALUD-NS.svg',color: Colors.white,),  
 
       ));
   }
@@ -74,8 +75,8 @@ class _PurpleFont extends StatelessWidget {
     return const BoxDecoration(
       gradient: LinearGradient(
         colors:[
-          Color.fromRGBO(63, 63, 156, 1),
-          Color.fromRGBO(90, 70, 178, 1)
+          Color.fromRGBO(234, 24, 77, 1),
+          Color.fromRGBO(180, 24, 77, 1)
           ],)
       );
   }

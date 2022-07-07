@@ -96,13 +96,13 @@ class _AlimentosSugeridos extends StatelessWidget {
   Widget build(BuildContext context) {
       Color color=Colors.white;
      switch (alimento.semaforo) {
-       case 1:
+       case "1":
          color=Colors.green.shade200;
          break;
-        case 2:
+        case "2":
          color=Colors.yellow.shade200;
          break;
-         case 3:
+         case "3":
          color=Colors.red.shade200;
          break;   
       

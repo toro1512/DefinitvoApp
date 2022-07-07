@@ -7,9 +7,8 @@ import 'package:http/http.dart' as http;
 
 class AlimentosService extends ChangeNotifier {
 
-  final String _baseUrl ='control-pesonode.herokuapp.com';
-  final List<Alimentos> alimentos=[];
-
+  final String _baseUrl ='nutricontrol.co';
+  
   final debouncer= Debouncer(
     duration: const Duration(milliseconds: 500),
     );
@@ -22,11 +21,11 @@ class AlimentosService extends ChangeNotifier {
    
     Future < List<Alimentos>> searchAlimentos (String query) async {
     
-    final base='api/food/like/'+query;
+    final base='api/queries/FoodLike/'+query;
     final url= Uri.https(_baseUrl,base);
     final resp = await http.get(url);
     final searchAlimentos= SearchAlimentos.fromJson(resp.body);
-    return searchAlimentos.results; 
+    return searchAlimentos.data; 
   }
 
   

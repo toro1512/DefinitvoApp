@@ -7,10 +7,11 @@ class Alimentos {
         required this.nombre,
         required this.proteina,
         required this.carbohidrato,
-        required this.grasas,
+        required this.lipids,
         required this.calorias,
+        required this.file,
         required this.semaforo,
-    });
+       });
 
   
     int id;
@@ -18,9 +19,11 @@ class Alimentos {
     String nombre;
     double proteina;
     double carbohidrato;
-    double grasas;
+    double lipids;
     double calorias;
-    int semaforo;
+    String file;
+    String semaforo;
+    
 
     
     factory Alimentos.fromJson(String str) => Alimentos.fromMap(json.decode(str));
@@ -28,13 +31,14 @@ class Alimentos {
     String toJson() => json.encode(toMap());
 
     factory Alimentos.fromMap(Map<String, dynamic> json) => Alimentos(
-         id: json["ID"],
+        id: json["ID"],
         grupo: json["GRUPO"],
         nombre: json["NOMBRE"],
         proteina: json["PROTEINA"].toDouble(),
         carbohidrato: json["CARBOHIDRATO"].toDouble(),
-        grasas: json["GRASAS"].toDouble(),
+        lipids: json["LIPIDS"].toDouble(),
         calorias: json["CALORIAS"].toDouble(),
+        file: json["FILE"],
         semaforo: json["SEMAFORO"],
     );
 
@@ -44,8 +48,9 @@ class Alimentos {
         "NOMBRE": nombre,
         "PROTEINA": proteina,
         "CARBOHIDRATO": carbohidrato,
-        "GRASAS": grasas,
+        "LIPIDS": lipids,
         "CALORIAS": calorias,
+        "FILE": file,
         "SEMAFORO": semaforo,
     };
 }

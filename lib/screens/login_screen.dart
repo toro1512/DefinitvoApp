@@ -106,7 +106,7 @@ class _FormLogin extends StatelessWidget {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               disabledColor: Colors.grey,
               elevation: 0,
-              color: Colors.deepPurple,
+              color: Colors.lightGreen,
               child: Container(
                 padding: const EdgeInsets.symmetric( horizontal: 40, vertical: 15),
                 child: Text(
@@ -124,11 +124,12 @@ class _FormLogin extends StatelessWidget {
 
                 loginForm.isLoading=true;
                 
-                final String? errorMes= await authServ.createrUser(loginForm.email, loginForm.password);
+                final String? errorMes= await authServ.login(loginForm.email, loginForm.password);
                 
                 if(errorMes == null){
                   ScaffoldMessenger.of(context).showSnackBar(
-                   const SnackBar(content: Text("Bienvenido")));
+                   const SnackBar(duration: Duration(seconds: 2),
+                   content: Text("Bienvenido")));
                   Navigator.pushReplacementNamed(context, 'home');
                 }
                 else{

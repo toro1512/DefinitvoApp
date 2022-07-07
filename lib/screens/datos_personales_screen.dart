@@ -98,7 +98,8 @@ class BodyDatosPersona extends StatelessWidget {
               firstDate: DateTime.now().add(const Duration(days: -(365 * 100))),
               dateFormat: "dd-MM-yyyy",
               locale: DatePicker.localeFromString("es"),
-              onChange: (value, selectedIndex) => datosUserProvider.fecha= value,
+              
+              onChange: (value, selectedIndex) => datosUserProvider.fecha=value,
               pickerTheme: DateTimePickerTheme(
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   dividerColor: AppTheme.primary),
