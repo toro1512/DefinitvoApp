@@ -22,6 +22,7 @@ class _HomeScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final generalProvider = Provider.of<GeneralProvider>(context);
+    
     // Cambiar para mostrar la pagina respectiva
     final currentIndex = generalProvider.indexBottom;
 

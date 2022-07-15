@@ -10,10 +10,18 @@ ModelosSubirc({
  
 });
   
-String idUser;
-String idFood;
-String idFoodMoment;
+int idUser;
+int idFood;
+int idFoodMoment;
 String fecha;
-int amount;
+double amount;
+
+ Map<String, dynamic> toJson() => {
+        "ID_USERS": idUser,
+        "ID_FOOD_MOMENT": idFoodMoment,
+        "ID_FOODS": idFood,
+        "AMOUNT": amount,
+        "DATE_INTAKE": fecha,
+    };
 
 }

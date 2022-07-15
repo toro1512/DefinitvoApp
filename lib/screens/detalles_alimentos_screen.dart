@@ -10,13 +10,13 @@ class DetallesAlimentosScreen extends StatelessWidget {
 
  @override
   Widget build(BuildContext context) {
-  String selectedValue= "gr";
-  int buscar=0;
-
-   final generalProvider=Provider.of<GeneralProvider>(context); 
-    List<Alimentos> aux=[];
-   final Alimentos alimento = ModalRoute.of(context)!.settings.arguments as Alimentos;
    
+ 
+   final Alimentos alimento = ModalRoute.of(context)!.settings.arguments as Alimentos;
+   String selectedValue= "gr";
+   int posicionC=0;
+   final generalProvider=Provider.of<GeneralProvider>(context); 
+   List<Alimentos> aux=[];
    final String  tituloS=generalProvider.tituloG;
    List<String>  itemsS = [];
    
@@ -36,64 +36,25 @@ class DetallesAlimentosScreen extends StatelessWidget {
       case 'Desayuno': 
           aux=generalProvider.desayunosLista;
         break;
-      case 'Meriendas': 
+      case 'Merienda': 
           aux=generalProvider.meriendasLista;
         break;
    
     }
-   switch(alimento.semaforo){
-        case "0" :
-        llenar(generalProvider.tipoLiquido);
-        selectedValue = 'ml';
-        buscar=0;
-
-        break;
-        case "1" :
-        llenar(generalProvider.tipoSolido);
-        selectedValue = 'gr';
-        buscar=1;
-        break;
-        case "2" :
-        llenar(generalProvider.tipoLiquido);
-        selectedValue = 'ml';
-        buscar=0;
-        break;
-        case "3" :
-        llenar(generalProvider.tipoSolido);
-        selectedValue = 'gr';
-        buscar=1;
-        break;
-        case "4" :
-        llenar(generalProvider.tipoLiquido);
-        selectedValue = 'ml';
-        buscar=0;
-        break;
-        case "5" :
-        llenar(generalProvider.tipoLiquido);
-        selectedValue = 'ml';
-        buscar=0;
-        break;
-        case "6" :
-        llenar(generalProvider.tipoSolido);
-        selectedValue = 'gr';
-        buscar=1;
-        break;
-        case "7" :
-        llenar(generalProvider.tipoLiquido);
-        selectedValue = 'ml';
-        buscar=0;
-        break;
-        case "8" :
-        llenar(generalProvider.tipoSolido);
-        selectedValue = 'gr';
-        buscar=1;
-        break;
-        case "9" :
-        llenar(generalProvider.tipoLiquido);
-        selectedValue = 'ml';
-        buscar=0;
-        
-        break;
+   switch(alimento.grupo){
+      
+        case "Leche y Derivados" :
+          llenar(generalProvider.tipoLiquido);
+          selectedValue = 'ml';
+          break;
+        case "Bebidas (Alcoholicas y No Alcoholicas)" :
+          llenar(generalProvider.tipoLiquido);
+          selectedValue = 'ml';
+          break;
+        default :
+          llenar(generalProvider.tipoSolido);
+          selectedValue = 'gr';
+          break;
       }
    
 
@@ -110,8 +71,16 @@ class DetallesAlimentosScreen extends StatelessWidget {
         child: FloatingActionButton.extended(
         backgroundColor: Colors.lightGreen, 
         onPressed: () {
+             if(generalProvider.valorTextEdit!=0){
+              alimento.amount=alimento.amount*generalProvider.valorConversion*generalProvider.valorTextEdit;
              aux.add(alimento);
-             Navigator.pushNamed(context, 'alimentos', arguments: tituloS);
+             Navigator.pushReplacementNamed(context, 'alimentos', arguments: tituloS);
+             }
+             else{
+              ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(duration: Duration(seconds: 2),
+              content: Text("Necesita ingresar un Valor")));
+             }
         },
         icon: const Icon(Icons.save),
         label: const Text("Gargar"),),
@@ -176,9 +145,17 @@ class DetallesAlimentosScreen extends StatelessWidget {
                           ),
                           onChanged: ( newValue){
                              selectedValue = newValue!;
-                             int i=generalProvider.tipoSolido.indexWhere((element) => element.name==selectedValue) ;
-                             generalProvider.valorConversion=generalProvider.tipoLiquido[i].vConversion;
-                             generalProvider.cantidadControl.text=generalProvider.tipoLiquido[i].vInicial.toString();
+                             posicionC=generalProvider.tipoSolido.indexWhere((element) => element.name==selectedValue) ;
+                              if (posicionC==-1){
+                                posicionC=generalProvider.tipoLiquido.indexWhere((element) => element.name==selectedValue) ;  
+                                generalProvider.valorConversion=generalProvider.tipoLiquido[posicionC].vConversion;
+                                generalProvider.cantidadControl.text=generalProvider.tipoLiquido[posicionC].vInicial.toString();
+                              }
+                              else{
+                                generalProvider.valorConversion=generalProvider.tipoSolido[posicionC].vConversion;
+                                generalProvider.cantidadControl.text=generalProvider.tipoSolido[posicionC].vInicial.toString();
+                              }
+                             
                              generalProvider.valorTextEdit=double.parse(generalProvider.cantidadControl.text);
                              if(generalProvider.cantidadControl.text.isNotEmpty)
                                 {generalProvider.notiCambios();}
@@ -256,25 +233,25 @@ class CuerpoBody extends StatelessWidget {
             TableRow(
               children:[ 
                 const _EtiquetaTabla(valorEti:'Carbohidratos en la porcion: '),
-                _EtiquetaTabla(valorEti: (alimento.carbohidrato*generalProvider.valorConversion*generalProvider.valorTextEdit/100).toString()+' gr') 
+                _EtiquetaTabla(valorEti: (alimento.carbohidrato*generalProvider.valorConversion*generalProvider.valorTextEdit).toString()+' gr') 
               ]
             ),
             TableRow(
               children:[ 
                 const _EtiquetaTabla(valorEti:'KCalorias en la porcion: '),
-                _EtiquetaTabla(valorEti: (alimento.calorias*generalProvider.valorConversion*generalProvider.valorTextEdit/100).toString()+' gr') 
+                _EtiquetaTabla(valorEti: (alimento.calorias*generalProvider.valorConversion*generalProvider.valorTextEdit).toString()+' gr') 
               ]
             ),
              TableRow(
               children:[ 
                  const _EtiquetaTabla(valorEti:'Grasas en la porcion: '),
-                _EtiquetaTabla(valorEti:(alimento.lipids*generalProvider.valorConversion*generalProvider.valorTextEdit/100).toString()+ ' gr') 
+                _EtiquetaTabla(valorEti:(alimento.lipids*generalProvider.valorConversion*generalProvider.valorTextEdit).toString()+ ' gr') 
               ]
             ),
             TableRow(
               children:[ 
                 const _EtiquetaTabla(valorEti:'Proteinas en la porcion: '),
-                _EtiquetaTabla(valorEti: (alimento.proteina*generalProvider.valorConversion*generalProvider.valorTextEdit/100).toString()+' gr') 
+                _EtiquetaTabla(valorEti: (alimento.proteina*generalProvider.valorConversion*generalProvider.valorTextEdit).toString()+' gr') 
               ]
             )
           ],),//Flexible

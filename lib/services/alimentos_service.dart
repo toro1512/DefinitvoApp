@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:nutri_saludapp/helpers/debouncer.dart';
@@ -19,7 +20,7 @@ class AlimentosService extends ChangeNotifier {
   AlimentosService();
   
    
-    Future < List<Alimentos>> searchAlimentos (String query) async {
+  Future < List<Alimentos>> searchAlimentos (String query) async {
     
     final base='api/queries/FoodLike/'+query;
     final url= Uri.https(_baseUrl,base);
@@ -27,6 +28,29 @@ class AlimentosService extends ChangeNotifier {
     final searchAlimentos= SearchAlimentos.fromJson(resp.body);
     return searchAlimentos.data; 
   }
+  Future<String?> insertarComidas (List<ModelosSubirc> alimentosSubir) async{
+
+
+    final url = Uri.https(_baseUrl, '/api/queries/Food');
+    
+    final valor =jsonEncode(alimentosSubir);
+    final resp = await http.post(url , headers: {"Content-Type": "application/json"} ,body: valor);
+    final Map <String , dynamic> decodeResp = jsonDecode(resp.body); 
+       if(decodeResp.containsKey('success')) 
+         { 
+          if(decodeResp['success']==1){
+            return "registro exitoso";
+           }
+         else
+           {
+           return "no se pudo registrar";
+          }
+        }
+       else{
+         return "Servidor no responde";
+         }
+   
+   }
 
   
   void getSuggestionByQuery(String query){

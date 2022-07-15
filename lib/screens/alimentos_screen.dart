@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nutri_saludapp/models/models.dart';
 import 'package:nutri_saludapp/providers/providers.dart';
 import 'package:nutri_saludapp/search/search_delegate.dart';
+import 'package:nutri_saludapp/services/services.dart';
+import 'package:nutri_saludapp/share_preferences/preferences.dart';
 import 'package:nutri_saludapp/themes/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +18,11 @@ class AlimentosScreen extends StatelessWidget {
    
     List<Alimentos> aux=[];
     List<Alimentos> auxSuger=[]; 
+    List<ModelosSubirc> cargaComida =[];
 
     final generalProvider = Provider.of<GeneralProvider>(context);
-      
+    final alimentosService= Provider.of<AlimentosService>(context);
+    int _idComida=0;  
       final String _titulo = ModalRoute.of(context)!.settings.arguments as String;
       generalProvider.tituloG=_titulo;
       
@@ -28,18 +32,22 @@ class AlimentosScreen extends StatelessWidget {
       case 'Almuerzo':
         aux=generalProvider.almuerosLista;
         auxSuger=generalProvider.almuerosSuge;
+        _idComida=2;
         break;
       case 'Cena': 
           aux=generalProvider.cenasLista;
           auxSuger=generalProvider.cenasSuge;
+          _idComida=3;
         break;
       case 'Desayuno': 
           aux=generalProvider.desayunosLista;
           auxSuger=generalProvider.desayunosSuge;
+          _idComida=1;
         break;
-      case 'Meriendas': 
+      case 'Merienda': 
           aux=generalProvider.meriendasLista;
           auxSuger=generalProvider.meriendasSuge;
+          _idComida=4;
         break;
    
     }
@@ -129,7 +137,20 @@ class AlimentosScreen extends StatelessWidget {
              ElevatedButton.icon(
                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.lightGreen)),
                icon: const Icon(Icons.save), label: const Text('Guardar', style: TextStyle(fontSize: 16)),
-               onPressed: (){},
+               onPressed: () async{
+              
+                  llenarEnvio(cargaComida,aux, generalProvider,_idComida);
+                  final String? respuesta=await alimentosService.insertarComidas(cargaComida);
+                      if(respuesta=="registro exitoso"){
+                         cargaComida.clear();
+                         aux.clear();
+                         ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(duration: const Duration(seconds: 2),
+                          content: Text(_titulo+" Cargado")));
+                         generalProvider.notiCambios();
+                        }
+
+               },
                ),
                
                 const Text('Sugerencias',style: TextStyle(
@@ -157,6 +178,18 @@ class AlimentosScreen extends StatelessWidget {
    
      
   }
+
+  void llenarEnvio(List<ModelosSubirc> cargaComida, List<Alimentos> aux, GeneralProvider generalProvider, int idComida) {
+
+      for(int i=0; i<aux.length;i++){
+        ModelosSubirc _obj= ModelosSubirc (amount: aux[i].amount, idFood: aux[i].id, fecha: generalProvider.fechaC, idFoodMoment: idComida, idUser: Preferences.idUs);
+        cargaComida.add(_obj);
+        }
+      
+
+
+  }
+
 }  
 
 class _CuerpoSugerencias extends StatelessWidget {
@@ -192,6 +225,7 @@ class _CuerpoSugerencias extends StatelessWidget {
      return Padding(
       padding: const EdgeInsets.all(2),
       child: Container(
+        
         decoration: BoxDecoration(border: Border.all(color: Colors.black),borderRadius: BorderRadius.circular(0), color: Colors.grey[200]),
         child: ListTile(
           onTap: () => Navigator.pushNamed(context, 'detalleAli', arguments: auxSuger[index]),
@@ -266,13 +300,13 @@ class _CuerpoListBuil extends StatelessWidget {
           generalProvider.borrarAlimento(index, true);        
         },
         child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-          child: ListTile(
+           decoration: BoxDecoration(border: Border.all(color: Colors.black),borderRadius: BorderRadius.circular(0), color: Colors.grey[200]),
+           child: ListTile(
              onTap: () => Navigator.pushNamed(context, 'detalleAli', arguments: aux[index]),
             contentPadding:const EdgeInsets.only(left: 5,right: 2,top: 2,bottom: 2),
             dense: true,
             title: Text(aux[index].nombre,style: const TextStyle(fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,),
-           // subtitle: Text('cal: '+auxSuger[index].calorias.toString()+' grs: '+auxSuger[index].grasas.toString()+' pro: '+auxSuger[index].proteina.toString() +' car: '+auxSuger[index].carbohidrato.toString() , style: TextStyle(fontSize: 10)),
+            subtitle: Text('cal: '+aux[index].calorias.toString()+' grs: '+aux[index].lipids.toString()+' pro: '+aux[index].proteina.toString() +' car: '+aux[index].carbohidrato.toString() , style: const TextStyle(fontSize: 10)),
             leading: SvgPicture.asset(rutaFile,height: 40, width: 40,),
             trailing: IconButton( 
               padding: const EdgeInsets.only(right: 3),

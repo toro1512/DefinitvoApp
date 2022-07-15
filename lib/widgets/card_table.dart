@@ -126,23 +126,47 @@ class _SigleCard extends StatelessWidget {
                                     ),
                                   )),
                                   ),
+
                                 contentPadding: const EdgeInsetsDirectional.only(start: 0, bottom: 0),  
-                                content:SizedBox(
-                                 height: 300.0, // Change as per your requirement
-                                 width: 300.0,
-                                 // Change as per your requirement
-                                 child: ListView.separated(
-                                 separatorBuilder: (context, index) => const Divider(height: 10, color: Colors.lightGreen),
-                                  shrinkWrap: true,
-                                  itemCount: _aux.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                     return ListTile(
-                                      title: Text(_aux[index].food),
-                                      subtitle: Text("consumiste " +_aux[index].kcal.toString()+ " Kcal"),
-                                     );
-                                   },
-                                 ),
-                               )
+                                content:
+                                
+                                 SizedBox(
+                                   height: 400.0, // Change as per your requirement
+                                   width: 300.0,
+                                   child: Column(
+                                    
+                                     children: [
+                                      if(_aux.isNotEmpty) ...[
+                                       SizedBox(
+                                        height: 390,
+                                         child: ListView.separated(
+                                      
+                                          separatorBuilder: (context, index) => const Divider(height: 10, color: Colors.lightGreen),
+                                          shrinkWrap: true,
+                                          itemCount: _aux.length,
+                                          itemBuilder: (BuildContext context, int index) {
+                                             return ListTile(
+                                              
+                                              title: Text(_aux[index].food),
+                                              subtitle: Text("consumiste " +_aux[index].kcal.toString()+ " Kcal"),
+                                             );
+                                           },
+                                         ),
+                                       )
+                                       ,
+                                       const SizedBox(
+                                        height: 5,
+                                       )
+                                      ]
+                                      else ...[
+                                        const SizedBox(
+                                        height: 20,
+                                       ),
+                                        const Center(child: Text("No tiene registros este dia"),)
+                                      ]
+                                     ],
+                                   ),
+                                 )
                               );
                             });
   }

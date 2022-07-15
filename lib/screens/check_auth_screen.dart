@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:nutri_saludapp/models/models.dart';
 import 'package:nutri_saludapp/providers/providers.dart';
 import 'package:nutri_saludapp/screens/screens.dart';
 import 'package:nutri_saludapp/services/services.dart';
@@ -55,6 +56,9 @@ class CheckAuthScreen extends StatelessWidget {
                 else{
                   obtenerQuery(context);
                   Future.microtask((){
+                     ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(duration: Duration(seconds: 2),
+                          content: Text("Bienvenido")));
                       Navigator.pushReplacement(context,PageRouteBuilder(
                       pageBuilder: (_,__,___)=> const HomeScreen(),
                       transitionDuration: const Duration(seconds: 0)) 
@@ -72,23 +76,28 @@ class CheckAuthScreen extends StatelessWidget {
 
 void obtenerQuery(context) async {
     final listaService = Provider.of<AlimentosDayService>(context, listen: false);
+    final medidasService = Provider.of<MedidasService>(context, listen: false);
     final generalProvider = Provider.of<GeneralProvider>(context, listen: false);
 
     const storage = FlutterSecureStorage();
     var now = DateTime.now();
     var formatter = DateFormat('yyyy-MM-dd');
     String fecha = formatter.format(now);
+
+    generalProvider.fechaC=fecha;
+    generalProvider.fechaM=fecha;
+    generalProvider.fechaF=fecha;
     String val=await storage.read(key: 'usuario') ?? '';
     val="'"+val+"'/";
     fecha='"'+fecha+'"';
     val= val+fecha;
-    generalProvider.medidasTomar.addAll(await listaService.searchMedidas());
+    generalProvider.medidasTomar.addAll(await medidasService.searchMedidas());
     generalProvider.alimentosDay.addAll(await listaService.searchAlimentos(val)); 
      for(int i=0;i<generalProvider.medidasTomar.length;i++)
     {
       if(generalProvider.medidasTomar[i].typ=="1" ) {
           generalProvider.medidasFisicas.add(generalProvider.medidasTomar[i]);
-      }
+        }
     }
     for(int i=0;i<generalProvider.alimentosDay.length;i++)
     {
@@ -109,6 +118,11 @@ void obtenerQuery(context) async {
    
       }
     }
+    List<ModelosSubirm> _objects = List<ModelosSubirm>.generate(generalProvider.medidasFisicas.length, (index) { 
+      ModelosSubirm _obj = ModelosSubirm(idUsers:-1, idPhysicalMeasures:-1, value: -1, measureDate: "-1", measureTime: "000", beforeAfter: 2, valueAlt: 0);
+      return _obj;
+     });
+    generalProvider.medidasSubir.addAll(_objects); 
     
   }
 }

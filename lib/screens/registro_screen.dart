@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nutri_saludapp/providers/providers.dart';
 import 'package:nutri_saludapp/services/services.dart';
 import 'package:nutri_saludapp/ui/input_decoration.dart';
@@ -53,7 +52,6 @@ class _FormLogin extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-     const storage = FlutterSecureStorage();
      final loginForm = Provider.of<LoginFormProvider>(context);
      final datosUsProvider = Provider.of<DatosUserProvider>(context);
 
@@ -133,11 +131,16 @@ class _FormLogin extends StatelessWidget {
                  
                  if(cargaUsuari=="registro exitoso")
                  {
-                  await storage.write(key: 'inicio', value: "Creado");
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Bienvenido")));
-                  Navigator.pushReplacementNamed(context, 'home');
+                  final String? hacerLogin= await authServ.login(loginForm.email, loginForm.password);
+                  if(hacerLogin == null){
+                      Navigator.pushReplacementNamed(context, 'checking');
+                    }
+                    else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("No pudo hacer Login")));
+                      loginForm.isLoading=false;
+                    }
+                  
                  }
                 }
                 else{

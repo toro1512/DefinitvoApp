@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nutri_saludapp/providers/general_provider.dart';
+import 'package:nutri_saludapp/share_preferences/preferences.dart';
 import 'package:nutri_saludapp/themes/app_theme.dart';
+import 'package:provider/provider.dart';
 
 class DatosMedidas extends StatelessWidget {
   final int indice;
@@ -15,6 +18,7 @@ class DatosMedidas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final generalProvider = Provider.of<GeneralProvider>(context);
     return SizedBox(
       width: double.infinity,
       child: Padding(
@@ -41,7 +45,13 @@ class DatosMedidas extends StatelessWidget {
                             ),
                             hintStyle: TextStyle(fontSize: 16, color: Colors.grey[300], )
                           ),
-                          
+                          onChanged: (value){
+                            generalProvider.medidasSubir[indice].value=double.parse(value);
+                            generalProvider.medidasSubir[indice].idUsers=Preferences.idUs;
+                            generalProvider.medidasSubir[indice].idPhysicalMeasures=indice+1;
+                            generalProvider.medidasSubir[indice].measureDate=generalProvider.fechaM;
+
+                          },
                     
                         ),
               ),

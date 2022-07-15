@@ -306,8 +306,8 @@ void initState() {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2030));
+        firstDate: DateTime(2022),
+        lastDate: DateTime.now());
     if (pickedDate != null && pickedDate != currentDate) {
 
     final listaService = Provider.of<AlimentosDayService>(context, listen: false);
@@ -317,6 +317,7 @@ void initState() {
     
     var formatter = DateFormat('yyyy-MM-dd');
     String fecha = formatter.format(pickedDate);
+    generalProvider.fechaC=fecha;
     String val=await storage.read(key: 'usuario') ?? '';
     val="'"+val+"'/";
     fecha='"'+fecha+'"';

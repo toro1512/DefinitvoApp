@@ -11,6 +11,7 @@ class Alimentos {
         required this.calorias,
         required this.file,
         required this.semaforo,
+        required this.amount,
        });
 
   
@@ -23,6 +24,7 @@ class Alimentos {
     double calorias;
     String file;
     String semaforo;
+    double amount;
     
 
     
@@ -40,6 +42,7 @@ class Alimentos {
         calorias: json["CALORIAS"].toDouble(),
         file: json["FILE"],
         semaforo: json["SEMAFORO"],
+        amount: 100,
     );
 
     Map<String, dynamic> toMap() => {

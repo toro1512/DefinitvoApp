@@ -127,10 +127,7 @@ class _FormLogin extends StatelessWidget {
                 final String? errorMes= await authServ.login(loginForm.email, loginForm.password);
                 
                 if(errorMes == null){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                   const SnackBar(duration: Duration(seconds: 2),
-                   content: Text("Bienvenido")));
-                  Navigator.pushReplacementNamed(context, 'home');
+                  Navigator.pushReplacementNamed(context, 'checking');
                 }
                 else{
                   ScaffoldMessenger.of(context).showSnackBar(

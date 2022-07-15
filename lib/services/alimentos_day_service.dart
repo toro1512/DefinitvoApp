@@ -17,14 +17,5 @@ class AlimentosDayService extends ChangeNotifier{
     final searchAlimentos= ListaAlimentos.fromJson(resp.body);
     return searchAlimentos.data; 
   }
-  Future < List<Medidas>> searchMedidas () async {
-    
-    const base='api/queries/Medidas';
-    final url= Uri.https(_baseUrl,base);
-    final resp = await http.get(url);
-    final searchMedidas= MedidasCargar.fromJson(resp.body);
-    return searchMedidas.data;
-  }
-
-
+  
 }

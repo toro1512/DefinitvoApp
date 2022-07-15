@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nutri_saludapp/models/models.dart';
 import 'package:nutri_saludapp/services/services.dart';
 import 'package:provider/provider.dart';
@@ -42,8 +43,11 @@ class AlimentosSearchDelegate extends SearchDelegate{
   }
 
   Widget _emptyContainer(){
-    return const Center(
-      child: Icon(Icons.launch_sharp, size: 150, color: Colors.black38),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SvgPicture.asset('assets/NUTRISALUD-NS.svg',),
+      ),
     );
   }
   Widget _noRespContainer(){
@@ -94,31 +98,32 @@ class _AlimentosSugeridos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      Color color=Colors.white;
-     switch (alimento.semaforo) {
+     String rutaFile="";
+   switch (alimento.semaforo) {
        case "1":
-         color=Colors.green.shade200;
+          rutaFile=alimento.file+' A.svg';
          break;
-        case "2":
-         color=Colors.yellow.shade200;
-         break;
-         case "3":
-         color=Colors.red.shade200;
+       case "2":
+         rutaFile=alimento.file+' B.svg';
+        break;
+       case "3":
+          rutaFile=alimento.file+' C.svg';
          break;   
-      
      }
-    return  Container(
-      margin: const EdgeInsets.symmetric(vertical: 2),
-      child: ListTile(
-                contentPadding: const EdgeInsets.all(10),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                
-                tileColor:color,
-              //  title: CustomItemAlimentos(alimento: alimento),
-
-                onTap: () => Navigator.pushNamed(context, 'detalleAli', arguments: alimento),
-                
-      )
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+      child: Container(
+            decoration: BoxDecoration(border: Border.all(color: Colors.black),borderRadius: BorderRadius.circular(0), color: Colors.grey[200]),
+            child: ListTile(
+               onTap: () => Navigator.pushNamed(context, 'detalleAli', arguments: alimento),
+              contentPadding:const EdgeInsets.only(left: 5,right: 2,top: 2,bottom: 2),
+              dense: true,
+              
+              title: Text(alimento.nombre, style: const TextStyle( fontSize: 14)),
+              subtitle: Text('cal: '+alimento.calorias.toString()+'; pro: '+alimento.proteina.toString() +'; car: '+alimento.carbohidrato.toString()+'; lips: '+alimento.lipids.toString() , style: const TextStyle(fontSize: 10)),
+              leading: SvgPicture.asset(rutaFile,height: 40, width: 40,),
+            ),
+          ),
     );
   }
-}    
+}   

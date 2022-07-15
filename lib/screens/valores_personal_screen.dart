@@ -2,9 +2,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:nutri_saludapp/providers/providers.dart';
 import 'package:nutri_saludapp/screens/screens.dart';
+import 'package:nutri_saludapp/services/services.dart';
 import 'package:nutri_saludapp/themes/app_theme.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:provider/provider.dart';
 
 
 class ValoresPersonalesScreen extends StatelessWidget {
@@ -13,7 +16,8 @@ class ValoresPersonalesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List <String> valores=["Presión arterial","Glucosa en la sangre", "Medidas"];
-     
+    final medidasService = Provider.of<MedidasService>(context, listen: false); 
+    final generalProvider = Provider.of<GeneralProvider>(context, listen: false);  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.primary,
@@ -29,7 +33,7 @@ class ValoresPersonalesScreen extends StatelessWidget {
            const SizedBox(height: 20),
            const FechaValores(),
            const SizedBox(height: 20),
-           Container(
+           SizedBox(
             
             width: double.infinity,
             child: Column(
@@ -40,7 +44,19 @@ class ValoresPersonalesScreen extends StatelessWidget {
                   itemBuilder:(context, index) => ListTile(
                   trailing: const Icon(Icons.arrow_forward_ios_outlined),
                   leading: const Icon(Icons.mediation),
-                  title:  Text(valores[index]), ),
+                  title:  Text(valores[index]), 
+                   onTap:() async {
+                    if(index==0){
+                     Navigator.of(context).push(
+                     MaterialPageRoute(builder: (context)=> const TensionScreen()),
+                     );}
+                     else
+                     if(index==1){
+                     Navigator.of(context).push(
+                     MaterialPageRoute(builder: (context)=> const GlucosaScreen()),
+                     );}
+                    },
+                  ),
                   separatorBuilder:((_,__)=> const Divider()), 
                   itemCount: valores.length-1
                   )
@@ -99,8 +115,9 @@ void initState() {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2030));
+        firstDate: DateTime(2022),
+        lastDate: DateTime.now(),
+       );
     if (pickedDate != null && pickedDate != currentDate) {
   
       setState(() {
@@ -110,6 +127,8 @@ void initState() {
   }
   @override
   Widget build(BuildContext context) {
+   final generalProvider= Provider.of<GeneralProvider>(context);
+   generalProvider.fechaM=DateFormat('yyyy-MM-dd').format(currentDate);
   return 
   PhysicalModel(
   color: Colors.white,

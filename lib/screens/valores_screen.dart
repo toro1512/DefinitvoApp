@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:nutri_saludapp/models/models.dart';
 import 'package:nutri_saludapp/providers/providers.dart';
+import 'package:nutri_saludapp/services/services.dart';
 import 'package:nutri_saludapp/themes/app_theme.dart';
 import 'package:nutri_saludapp/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +13,9 @@ class ValoresScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     List <ModelosSubirm> auxSubirFsica=[];
      final generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+     final medidasService = Provider.of<MedidasService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.primary,
@@ -23,19 +28,40 @@ class ValoresScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ElevatedButton(
-                onPressed: (){},
-                child: const Text("guardar")),
-              Container(
-                height: 500,
+              SizedBox(
+                height: 300,
                 child: ListView.builder(
                   
                   itemBuilder:(context, index) =>  DatosMedidas(indice:index, valorPedir:generalProvider.medidasFisicas[index].pmName,labelMedida:generalProvider.medidasFisicas[index].puName), 
                   shrinkWrap: true,
                   itemCount: generalProvider.medidasFisicas.length),
               ),
-                          
+              const SizedBox(height: 20,),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                primary: Colors.lightGreen,
+                textStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal)),
+                onPressed: ()async{
+                  int i=_llenarEnvio(generalProvider.medidasSubir,auxSubirFsica);
+                  if(i>0){
+                      final String? respuesta=await medidasService.insertarMedidas(auxSubirFsica);
+                      if(respuesta=="registro exitoso"){
+                                               
+                         auxSubirFsica.clear();
+                      }
+                     
+                  }
+                  
+                },
+                child: const Text("guardar")
+              ),
+              const SizedBox(height: 30,),
+              Image.asset('assets/silueta.png',height: 200, width:200,), 
+
             ],
+            
           ),
         ),
       )
@@ -43,4 +69,25 @@ class ValoresScreen extends StatelessWidget {
     );
     
   }
+
+  int _llenarEnvio(List<ModelosSubirm> medidasSubir, List<ModelosSubirm> auxSubirFsica) {
+    for(int i=0; i<medidasSubir.length;i++){
+      if(medidasSubir[i].value!= -1){
+        auxSubirFsica.add(medidasSubir[i]);
+      }
+    }
+    if(auxSubirFsica.isNotEmpty)
+    {
+      DateTime now = DateTime.now();
+      String dateM = DateFormat('kk:mm:ss').format(now);
+      for(int i=0; i<auxSubirFsica.length;i++)
+      {
+        auxSubirFsica[i].measureTime=dateM;
+      }        
+      
+    }
+    return auxSubirFsica.length;
+  }
+
+  
 }
