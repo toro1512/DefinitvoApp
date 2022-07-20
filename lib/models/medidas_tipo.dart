@@ -11,6 +11,7 @@ class MedidasTipo {
         required this.measureDate,
         required this.measureTime,
         required this.valueAlt,
+        required this.beforeAfter,
     });
 
     int pmId;
@@ -19,9 +20,10 @@ class MedidasTipo {
     String puName;
     String typ;
     int valor;
-    DateTime measureDate;
+    String measureDate;
     String measureTime;
     int valueAlt;
+    String beforeAfter;
 
     factory MedidasTipo.fromJson(String str) => MedidasTipo.fromMap(json.decode(str));
 
@@ -34,9 +36,10 @@ class MedidasTipo {
         puName: json["PU_NAME"],
         typ: json["TYP"],
         valor: json["VALOR"],
-        measureDate: DateTime.parse(json["MEASURE_DATE"]),
+        measureDate:json["MEASURE_DATE"],
         measureTime: json["MEASURE_TIME"],
         valueAlt: json["VALUE_ALT"],
+        beforeAfter: json["BEFORE_AFTER"],
     );
 
     Map<String, dynamic> toMap() => {
@@ -46,8 +49,9 @@ class MedidasTipo {
         "PU_NAME": puName,
         "TYP": typ,
         "VALOR": valor,
-        "MEASURE_DATE": measureDate.toIso8601String(),
+        "MEASURE_DATE": measureDate,
         "MEASURE_TIME": measureTime,
         "VALUE_ALT": valueAlt,
+        "BEFORE_AFTER": beforeAfter,
     };
 }

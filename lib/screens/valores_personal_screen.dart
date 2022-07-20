@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:nutri_saludapp/providers/providers.dart';
 import 'package:nutri_saludapp/screens/screens.dart';
 import 'package:nutri_saludapp/services/services.dart';
+import 'package:nutri_saludapp/share_preferences/preferences.dart';
 import 'package:nutri_saludapp/themes/app_theme.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class ValoresPersonalesScreen extends StatelessWidget {
     List <String> valores=["Presión arterial","Glucosa en la sangre", "Medidas"];
     final medidasService = Provider.of<MedidasService>(context, listen: false); 
     final generalProvider = Provider.of<GeneralProvider>(context, listen: false);  
+    String valor='';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.primary,
@@ -43,15 +45,23 @@ class ValoresPersonalesScreen extends StatelessWidget {
                   shrinkWrap: true,
                   itemBuilder:(context, index) => ListTile(
                   trailing: const Icon(Icons.arrow_forward_ios_outlined),
-                  leading: const Icon(Icons.mediation),
+                  leading: const Icon(Icons.circle_outlined),
                   title:  Text(valores[index]), 
                    onTap:() async {
+                    valor=Preferences.idUs.toString();
+                    generalProvider.medidasHistico.clear();  
                     if(index==0){
+                     valor=valor+'/5';
+                     generalProvider.medidasHistico.addAll(await medidasService.historialMedidas(valor));
+                     generalProvider.llenarGraficas();
                      Navigator.of(context).push(
                      MaterialPageRoute(builder: (context)=> const TensionScreen()),
                      );}
                      else
                      if(index==1){
+                     valor=valor+'/4';
+                     generalProvider.medidasHistico.addAll(await medidasService.historialMedidas(valor)); 
+                     generalProvider.llenarGraficasGlu();
                      Navigator.of(context).push(
                      MaterialPageRoute(builder: (context)=> const GlucosaScreen()),
                      );}
@@ -64,8 +74,8 @@ class ValoresPersonalesScreen extends StatelessWidget {
             )
             ),
            const SizedBox(height: 10),
-           Container(
-            color: Colors.amber,
+           SizedBox(
+         
             width: double.infinity,
             child:  Column(
               children: [
@@ -77,7 +87,7 @@ class ValoresPersonalesScreen extends StatelessWidget {
                    onTap:(){
                      Navigator.of(context).push(
                      MaterialPageRoute(builder: (context)=> const ValoresScreen()),);},
-                  leading: const Icon(Icons.mediation),
+                  leading: const Icon(Icons.circle_outlined),
                   title:  Text(valores[2]), ),
                   separatorBuilder:((_,__)=> const Divider()), 
                   itemCount: 1

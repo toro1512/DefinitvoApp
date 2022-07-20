@@ -46,7 +46,7 @@ class DatosMedidas extends StatelessWidget {
                             hintStyle: TextStyle(fontSize: 16, color: Colors.grey[300], )
                           ),
                           onChanged: (value){
-                            generalProvider.medidasSubir[indice].value=double.parse(value);
+                            generalProvider.medidasSubir[indice].value=int.parse(value);
                             generalProvider.medidasSubir[indice].idUsers=Preferences.idUs;
                             generalProvider.medidasSubir[indice].idPhysicalMeasures=indice+1;
                             generalProvider.medidasSubir[indice].measureDate=generalProvider.fechaM;

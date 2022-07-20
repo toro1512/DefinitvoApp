@@ -43,7 +43,7 @@ class MedidasService extends ChangeNotifier{
   }
   Future < List<MedidasTipo>> historialMedidas (String query) async {
     
-    const base='api/queries/MedidasPresion';
+    final base='api/queries/MedidasPresion/'+query;
     final url= Uri.https(_baseUrl,base);
     final resp = await http.get(url);
     final searchMedidas= ListaMedidas.fromJson(resp.body);

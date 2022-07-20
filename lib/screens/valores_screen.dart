@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +13,77 @@ import 'package:provider/provider.dart';
 
 class ValoresScreen extends StatelessWidget {
   const ValoresScreen({Key? key}) : super(key: key);
+  
+  
+   void displayDialogIOS( BuildContext context ) {
+    showCupertinoDialog(
+      barrierDismissible: false,
+      context: context, 
+      builder: ( context ) {
+        return CupertinoAlertDialog(
+          title: const Text('Titulo'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children:  [
+              const Text('Registro Exitoso'),
+              const SizedBox( height: 10 ),
+              SvgPicture.asset('assets/NUTRISALUD-NS.svg'), 
+            ],
+          ),
+          actions: [
+
+            
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)..pop()..pop();
+              },
+              child: const Text('Ok')
+            ),
+
+          ],
+        );
+      }
+    );
+
+  }
+
+  void displayDialogAndroid(BuildContext context) {
+    
+    showDialog(
+      barrierDismissible: false,
+      context: context, 
+      builder: ( context ) {
+
+        return AlertDialog(
+          elevation: 5,
+          title:  SvgPicture.asset('assets/NUTRISALUD-NS.svg'), 
+          shape: RoundedRectangleBorder( borderRadius: BorderRadiusDirectional.circular(10) ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children:const [
+               Text('Registro Exitoso'),
+               SizedBox( height: 10 ),
+               
+            ],
+          ),
+          actions: [
+
+          
+             TextButton(
+              onPressed: () {
+                Navigator.of(context)..pop()..pop();
+              },
+              child: const Text('Ok')
+            ),
+
+          ],
+        );
+        
+      }
+    );
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +102,9 @@ class ValoresScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const SizedBox(height: 10),
+              Text("Fecha: "+generalProvider.fechaM, style: const TextStyle(fontSize: 22)),
+              const SizedBox(height: 10),
               SizedBox(
                 height: 300,
                 child: ListView.builder(
@@ -50,6 +127,9 @@ class ValoresScreen extends StatelessWidget {
                       if(respuesta=="registro exitoso"){
                                                
                          auxSubirFsica.clear();
+                          Platform.isAndroid 
+                             ? displayDialogAndroid( context )
+                             : displayDialogIOS( context );
                       }
                      
                   }

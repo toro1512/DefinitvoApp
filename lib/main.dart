@@ -33,6 +33,7 @@ class AppState extends StatelessWidget {
       ChangeNotifierProvider(create: (_)=>FisicasService()),
       ChangeNotifierProvider(create: (_)=>DatosUserProvider()),
       ChangeNotifierProvider(create: (_)=>AlimentosDayService()),
+      ChangeNotifierProvider(create: (_)=>ActividadesProvider()),
      
           
     ],
@@ -63,7 +64,8 @@ class Myapp extends StatelessWidget{
         'datosTres':( _ )=> const DatosTresScreen(),
         'glucosa':( _ )=> const TensionScreen(),
         'tension':( _ )=> const GlucosaScreen(),
-      
+        'actividades':( _ )=> const ActividadesScreen(),
+        'actividadesDetalles':( _ )=> const ActividadesDetallesScreen(),
       },
       
 

@@ -190,7 +190,7 @@ class BodyHome extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap:() => Navigator.pushNamed(context, 'actividades', arguments: 'Fisica'),
                   child:Container(
                    padding: const EdgeInsets.symmetric(horizontal:5),
                    width: size.width*0.30,
@@ -216,8 +216,9 @@ class BodyHome extends StatelessWidget {
                         ],
                       ),
                   )
-                 ),                 GestureDetector(
-                  onTap: () {},
+                 ), 
+                 GestureDetector(
+                  onTap: ()  => Navigator.pushNamed(context, 'actividades', arguments: 'Trabajo'),
                   child:Container(
                    padding: const EdgeInsets.symmetric(horizontal:5),
                    width: size.width*0.30,
@@ -245,7 +246,7 @@ class BodyHome extends StatelessWidget {
                   )
                  ),
                  GestureDetector(
-                  onTap: () {},
+                  onTap: ()  => Navigator.pushNamed(context, 'actividades', arguments: 'Recreacionales'),
                   child:Container(
                    padding: const EdgeInsets.symmetric(horizontal:5),
                    width: size.width*0.30,

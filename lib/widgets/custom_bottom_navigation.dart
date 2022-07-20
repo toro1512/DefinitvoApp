@@ -32,7 +32,7 @@ class CustomBottomNavigation extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: SvgPicture.asset("assets/FAV.svg",height: 30,width: 30),
-          label: 'Recomendaciones'
+          label: 'Medidas'
         ),
          BottomNavigationBarItem(
           icon: SvgPicture.asset("assets/POLL.svg",height: 30,width: 30,),

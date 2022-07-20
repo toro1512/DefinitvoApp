@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nutri_saludapp/models/models.dart';
-
+import 'package:charts_flutter/flutter.dart' as charts;
 class GeneralProvider extends ChangeNotifier{
 
  List <Alimentos> almuerosLista= [];
@@ -15,6 +15,13 @@ class GeneralProvider extends ChangeNotifier{
  List <Medidas> medidasTomar= [];
  List <Medidas> medidasFisicas= [];
  List <ModelosSubirm> medidasSubir=[];
+ List <MedidasTipo> medidasHistico=[];
+ List<Expenses> data=[];
+ List<Expenses> data2=[];
+ List<ExpensesGli> dataGlu=[];
+ 
+
+
  
   List <Alimentos> almuerosSuge= [
   Alimentos(id:274,grupo:"6",nombre:"Cerdo lomo horneado sin sal",proteina:35.1,carbohidrato:0,lipids:3.2,calorias:170, semaforo: "1", file: "assets/PLATO", amount: 100),
@@ -62,6 +69,10 @@ class GeneralProvider extends ChangeNotifier{
 
  ];
  final cantidadControl = TextEditingController(text:"100");
+ final tensionAlta = TextEditingController();
+ final tensionBaja = TextEditingController();
+ final axucarContr = TextEditingController();
+ bool _antesComer=false;
  int _caloriasQue=0;
  int _caloriasCon=0;
  int _indexBottom = 0;
@@ -79,6 +90,7 @@ class GeneralProvider extends ChangeNotifier{
  String get fechaC => _fechaC;
  String get fechaM => _fechaM;
  String get fechaF => _fechaF;
+ bool get antesComer => _antesComer;
  int get indexBottom => _indexBottom;
  int get idUsuario => _idUsuario;
  int get caloriasQue => _caloriasQue;
@@ -95,9 +107,14 @@ class GeneralProvider extends ChangeNotifier{
  List <AlimentosDia> get desLisDia=> desLisDay;
  List <Medidas> get medidasEvaluar=> medidasFisicas;
 
+
  //SETTER
  set indexBottom(value) {
     _indexBottom = value;
+    notifyListeners();
+ }
+ set antesComer(value) {
+    _antesComer = value;
     notifyListeners();
  }
  set caloriasCon(value) {
@@ -133,6 +150,37 @@ class GeneralProvider extends ChangeNotifier{
  
  void notiCambios(){
   notifyListeners();
+ }
+ void llenarGraficas(){
+       data.clear();
+       data2.clear();
+       for(int i=0; i<medidasHistico.length; i++){
+        data.add(objetoExp(medidasHistico[i].measureDate.substring(5, 10),medidasHistico[i].measureTime.substring(0, 5),medidasHistico[i].valor));
+        data2.add(objetoExp(medidasHistico[i].measureDate.substring(5, 10),medidasHistico[i].measureTime.substring(0, 5),medidasHistico[i].valueAlt));
+      }
+ }
+ void llenarGraficasGlu(){
+  Color colorB;
+       dataGlu.clear();
+       
+       for(int i=0; i<medidasHistico.length; i++){
+        if(medidasHistico[i].beforeAfter=='1')
+        { colorB=Colors.grey;
+          dataGlu.add(objetoExpGlu(medidasHistico[i].measureDate.substring(5, 10),medidasHistico[i].measureTime,medidasHistico[i].valor,colorB)); }
+        else
+        { colorB=Colors.green;
+          dataGlu.add(objetoExpGlu(medidasHistico[i].measureDate.substring(5, 10),medidasHistico[i].measureTime,medidasHistico[i].valor,colorB));}
+      }
+ }
+ Expenses objetoExp(String day, String hora, int medida){
+   
+    Expenses _objet= Expenses('$day\n$hora', medida);
+    return _objet;
+ }
+ ExpensesGli objetoExpGlu(String day, String hora, int medida, Color color){
+   
+    ExpensesGli _objet= ExpensesGli('$day\n$hora', medida,charts.ColorUtil.fromDartColor(color));
+    return _objet;
  }
   void clearVectores(){
   alimentosDay.clear();
