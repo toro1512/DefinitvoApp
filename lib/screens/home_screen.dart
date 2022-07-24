@@ -36,7 +36,7 @@ class _HomeScreenBody extends StatelessWidget {
          return const  ValoresPersonalesScreen();
   
       case 2: 
-         return const  ValoresScreen();
+         return const  PreguntasScreen();
 
       default:
         return const  ValoresScreen();

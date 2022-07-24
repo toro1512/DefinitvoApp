@@ -60,11 +60,13 @@ class Myapp extends StatelessWidget{
         'alimentos':( _ )=> const AlimentosScreen(),
         'datosPersonales':( _ )=> const DatosPersonalesScreen(),
         'bienvenida':( _ )=> const BienvenidaScreen(),
+        'detalleAli':( _ )=> const DetallesAlimentosScreen(),
         'datosDos':( _ )=> const DatosDosScreen(),
         'datosTres':( _ )=> const DatosTresScreen(),
         'glucosa':( _ )=> const TensionScreen(),
         'tension':( _ )=> const GlucosaScreen(),
         'actividades':( _ )=> const ActividadesScreen(),
+        'preguntas':( _ )=> const PreguntasScreen(),
         'actividadesDetalles':( _ )=> const ActividadesDetallesScreen(),
       },
       

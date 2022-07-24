@@ -1,19 +1,30 @@
+
 class ModelosSubirf{
 
 ModelosSubirf({
-
-  required this.idUser,
-  required this.idFood,
-  required this.idFoodMoment,
-  required this.amount,
-  required this.fecha,
+  
+  required this.user,
+  required this.intensidad,
+  required this.duracion,
+  required this.actividad,
+  required this.day,
+  required this.calorias
  
 });
   
-String idUser;
-String idFood;
-String idFoodMoment;
-String fecha;
-int amount;
+int user;
+int intensidad;
+int duracion;
+String day;
+int actividad;
+double calorias;
 
+Map<String, dynamic> toJson() => {
+      "ID_USERS": user,
+      "ID_INTENSITIES": intensidad,
+      "DURATION": duracion,
+      "DATE_ACTIVITY": day,
+      "ID_ACTIVITIES": actividad,
+      "KCAL": calorias,
+    };
 }

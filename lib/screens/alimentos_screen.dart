@@ -23,8 +23,8 @@ class AlimentosScreen extends StatelessWidget {
     final generalProvider = Provider.of<GeneralProvider>(context);
     final alimentosService= Provider.of<AlimentosService>(context);
     int _idComida=0;  
-      final String _titulo = ModalRoute.of(context)!.settings.arguments as String;
-      generalProvider.tituloG=_titulo;
+    final String _titulo = ModalRoute.of(context)!.settings.arguments as String;
+    generalProvider.tituloG=_titulo;
       
 
       switch( _titulo ) {

@@ -18,4 +18,13 @@ class AlimentosDayService extends ChangeNotifier{
     return searchAlimentos.data; 
   }
   
+   Future < List<ActividadesFisicas>> searchActividades () async {
+    
+    const base='api/queries/ActividadesLike';
+    final url= Uri.https(_baseUrl,base);
+    final resp = await http.get(url);
+    final searchActividades= SearchActividades.fromJson(resp.body);
+    return searchActividades.data; 
+  }
+  
 }

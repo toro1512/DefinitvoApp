@@ -188,7 +188,7 @@ class _TomarMedidasTen extends StatelessWidget {
             else{subirBefore=2;}
             DateTime now = DateTime.now();
             String _dateM = DateFormat('kk:mm:ss').format(now);
-            ModelosSubirm _obj=ModelosSubirm(idUsers: Preferences.idUs, idPhysicalMeasures: 4, beforeAfter: subirBefore, value: int.parse(generalProvider.axucarContr.text), measureDate: generalProvider.fechaM, measureTime: _dateM, valueAlt: 0);
+            ModelosSubirm _obj=ModelosSubirm(idUsers: Preferences.idUs, idPhysicalMeasures: 4, beforeAfter: subirBefore, value: double.parse(generalProvider.axucarContr.text), measureDate: generalProvider.fechaM, measureTime: _dateM, valueAlt: 0);
             auxSubirFsica.add(_obj);
             final String? respuesta=await medidasService.insertarMedidas(auxSubirFsica);
                       if(respuesta=="registro exitoso"){

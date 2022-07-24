@@ -36,7 +36,7 @@ class CustomBottomNavigation extends StatelessWidget {
         ),
          BottomNavigationBarItem(
           icon: SvgPicture.asset("assets/POLL.svg",height: 30,width: 30,),
-          label: 'Estadisticas'
+          label: 'Encuesta'
         ),
        
       ],

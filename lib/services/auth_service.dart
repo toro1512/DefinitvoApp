@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nutri_saludapp/models/models.dart';
 import 'package:nutri_saludapp/share_preferences/preferences.dart';
 
 class AuthService extends ChangeNotifier{
@@ -58,6 +59,40 @@ final storage = const FlutterSecureStorage();
       await storage.write(key: 'usuario', value: email);
       Preferences.idUs=decodeResp['id'];
       await storage.write(key: 'idd', value: decodeResp['id'].toString());
+      if(Preferences.pesoUs!=-1){
+         DateTime now = DateTime.now();
+         String _dateMn = DateFormat('kk:mm:ss').format(now);
+         String _fechaMn = DateFormat('yyyy-MM-dd').format(now);
+         final urlM = Uri.https(_baseUrl, '/api/queries/Medidas');
+          List <ModelosSubirm> auxSubirFsica=[
+           ModelosSubirm(idUsers: Preferences.idUs, idPhysicalMeasures: 2, beforeAfter: 1, value: Preferences.pesoUs, measureDate: _fechaMn, measureTime: _dateMn, valueAlt:0),
+           ModelosSubirm(idUsers: Preferences.idUs, idPhysicalMeasures: 3, beforeAfter: 1, value: Preferences.altuUs, measureDate: _fechaMn, measureTime: _dateMn, valueAlt: 0), 
+          ];
+         final valor =jsonEncode(auxSubirFsica);
+         final respond = await http.post(urlM , headers: {"Content-Type": "application/json"} ,body: valor);
+         final Map <String , dynamic> decodeRespuee = jsonDecode(respond.body); 
+         if(decodeRespuee.containsKey('success')) 
+            { 
+             if(decodeRespuee['success']==1){
+                 
+             }
+           else
+             {
+             
+             }
+        }
+      }
+      if(Preferences.pesoUs==-1){
+         final baseAc='api/queries/MedidasPeso/'+decodeResp['id'].toString()+'/'+'2';
+         final urlAc= Uri.https(_baseUrl,baseAc);
+         final respu = await http.get(urlAc);
+         final Map <String , dynamic> decodeRespu = jsonDecode(respu.body);
+         if(decodeRespu.containsKey('value')){
+          
+            Preferences.pesoUs=decodeRespu['value']+0.0;
+         }
+        
+      }  
     }
     else{
       return decodeResp['message'];}
@@ -99,6 +134,7 @@ Future logout() async{
   await storage.delete(key: 'tokenm');
   await storage.delete(key: 'idd');
   Preferences.idUs=-1;
+  Preferences.pesoUs=-1;
  
  }
 Future<String> readToken() async {

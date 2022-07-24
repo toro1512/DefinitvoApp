@@ -78,12 +78,13 @@ void obtenerQuery(context) async {
     final listaService = Provider.of<AlimentosDayService>(context, listen: false);
     final medidasService = Provider.of<MedidasService>(context, listen: false);
     final generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+    final actividadesProvider = Provider.of<ActividadesProvider>(context, listen: false);
 
     const storage = FlutterSecureStorage();
     var now = DateTime.now();
     var formatter = DateFormat('yyyy-MM-dd');
     String fecha = formatter.format(now);
-
+    actividadesProvider.fechaAc=fecha;
     generalProvider.fechaC=fecha;
     generalProvider.fechaM=fecha;
     generalProvider.fechaF=fecha;
@@ -91,6 +92,7 @@ void obtenerQuery(context) async {
     val="'"+val+"'/";
     fecha='"'+fecha+'"';
     val= val+fecha;
+    actividadesProvider.todasActividades.addAll(await listaService.searchActividades());
     generalProvider.medidasTomar.addAll(await medidasService.searchMedidas());
     generalProvider.alimentosDay.addAll(await listaService.searchAlimentos(val)); 
      for(int i=0;i<generalProvider.medidasTomar.length;i++)

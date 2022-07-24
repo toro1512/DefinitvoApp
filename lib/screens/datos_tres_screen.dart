@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nutri_saludapp/providers/providers.dart';
+import 'package:nutri_saludapp/share_preferences/preferences.dart';
 import 'package:nutri_saludapp/themes/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -162,7 +163,8 @@ class BodyDatosTres extends StatelessWidget {
               {
                datosUserProvider.imcP=calculadorImc(double.parse(datosUserProvider.alturaControl.text), double.parse(datosUserProvider.pesoControl.text), pintar);
                datosUserProvider.isIMC=true;
-               
+               Preferences.pesoUs=double.parse(datosUserProvider.pesoControl.text);
+               Preferences.altuUs=double.parse(datosUserProvider.alturaControl.text);
               }
              else{
                ScaffoldMessenger.of(context).showSnackBar(

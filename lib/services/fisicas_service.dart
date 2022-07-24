@@ -1,6 +1,7 @@
 
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:nutri_saludapp/helpers/debouncer.dart';
@@ -13,8 +14,8 @@ class FisicasService extends ChangeNotifier{
   final debouncer= Debouncer(
     duration: const Duration(milliseconds: 500),
     );
-  final StreamController <List <Alimentos>> _suggestionStreamController= StreamController.broadcast();
-  Stream<List<Alimentos>> get suggestionsStream => _suggestionStreamController.stream;
+  final StreamController <List <ActividadesFisicas>> _suggestionStreamController= StreamController.broadcast();
+  Stream<List<ActividadesFisicas>> get suggestionsStream => _suggestionStreamController.stream;
 
    FisicasService();
  
@@ -22,7 +23,7 @@ class FisicasService extends ChangeNotifier{
 
     debouncer.value ='';
     debouncer.onValue= (value) async {
-      final result= await searchAlimentos(query);
+      final result= await searchActividades();
       _suggestionStreamController.add(result);
 
     };
@@ -33,13 +34,37 @@ class FisicasService extends ChangeNotifier{
      Future.delayed(const Duration(milliseconds: 201)).then( (_) => timer.cancel());
   }
 
-   Future < List<Alimentos>> searchAlimentos (String query) async {
+   Future < List<ActividadesFisicas>> searchActividades () async {
     
-    final base='api/queries/FoodLike/'+query;
+    const base='api/queries/ActividadesLike';
     final url= Uri.https(_baseUrl,base);
     final resp = await http.get(url);
-    final searchAlimentos= SearchAlimentos.fromJson(resp.body);
-    return searchAlimentos.data; 
+    final searchActividades= SearchActividades.fromJson(resp.body);
+    return searchActividades.data; 
   }
+
+  Future<String?> insertarFisicas (List<ModelosSubirf> dataM) async{
+
+
+    final url = Uri.https(_baseUrl, '/api/queries/Activities');
+    
+    final valor =jsonEncode(dataM);
+    final resp = await http.post(url , headers: {"Content-Type": "application/json"} ,body: valor);
+    final Map <String , dynamic> decodeResp = jsonDecode(resp.body); 
+       if(decodeResp.containsKey('success')) 
+         { 
+          if(decodeResp['success']==1){
+            return "registro exitoso";
+           }
+         else
+           {
+           return "no se pudo registrar";
+          }
+        }
+       else{
+         return "Servidor no responde";
+         }
+   
+   }
 
 }

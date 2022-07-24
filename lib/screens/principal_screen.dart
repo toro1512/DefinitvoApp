@@ -190,7 +190,7 @@ class BodyHome extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap:() => Navigator.pushNamed(context, 'actividades', arguments: 'Fisica'),
+                  onTap:() => Navigator.pushNamed(context, 'actividades', arguments: 'Deportivas'),
                   child:Container(
                    padding: const EdgeInsets.symmetric(horizontal:5),
                    width: size.width*0.30,
@@ -201,7 +201,7 @@ class BodyHome extends StatelessWidget {
                         children: [
                           Expanded(flex:5,child: SvgPicture.asset("assets/EXC.svg",height: 40,width: 40, color: Colors.white)),
                           const SizedBox(height: 1,),
-                          const Expanded(flex:2,child: AutoSizeText('fisicas', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),maxLines:1, minFontSize:8 ), ),
+                          const Expanded(flex:2,child: AutoSizeText('deportivas', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),maxLines:1, minFontSize:8 ), ),
                           const Divider(height: 3, thickness:2,),
                           const Expanded( flex: 2,
                            child:SizedBox(
@@ -218,7 +218,7 @@ class BodyHome extends StatelessWidget {
                   )
                  ), 
                  GestureDetector(
-                  onTap: ()  => Navigator.pushNamed(context, 'actividades', arguments: 'Trabajo'),
+                  onTap: ()  => Navigator.pushNamed(context, 'actividades', arguments: 'Ocupacionales'),
                   child:Container(
                    padding: const EdgeInsets.symmetric(horizontal:5),
                    width: size.width*0.30,
@@ -229,7 +229,7 @@ class BodyHome extends StatelessWidget {
                         children: [
                           Expanded(flex:5,child: SvgPicture.asset("assets/WORK.svg",height: 40,width: 40, color: Colors.white)),
                           const SizedBox(height: 1,),
-                          const Expanded(flex:2,child: AutoSizeText('de trabajo', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),maxLines:1, minFontSize:8), ),
+                          const Expanded(flex:2,child: AutoSizeText('ocupacionales', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),maxLines:1, minFontSize:8), ),
                           const Divider(height: 3, thickness:2,),
                           const Expanded( flex: 2,
                            child:SizedBox(
@@ -313,12 +313,14 @@ void initState() {
 
     final listaService = Provider.of<AlimentosDayService>(context, listen: false);
     final generalProvider = Provider.of<GeneralProvider>(context, listen: false);
+     final actividadesProvider = Provider.of<ActividadesProvider>(context, listen: false);
     const storage = FlutterSecureStorage();
 
     
     var formatter = DateFormat('yyyy-MM-dd');
     String fecha = formatter.format(pickedDate);
     generalProvider.fechaC=fecha;
+    actividadesProvider.fechaAc=fecha;
     String val=await storage.read(key: 'usuario') ?? '';
     val="'"+val+"'/";
     fecha='"'+fecha+'"';

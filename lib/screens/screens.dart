@@ -16,6 +16,9 @@ export 'package:nutri_saludapp/screens/glucosa_screen.dart';
 export 'package:nutri_saludapp/screens/tension_screen.dart';
 export 'package:nutri_saludapp/screens/actividades_detalles_screen.dart';
 export 'package:nutri_saludapp/screens/actividades_screen.dart';
+export 'package:nutri_saludapp/screens/preguntas_screen.dart';
+
+
 
 
 

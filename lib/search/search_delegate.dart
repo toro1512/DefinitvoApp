@@ -129,10 +129,12 @@ class _AlimentosSugeridos extends StatelessWidget {
 } 
 class ActividadesSearchDelegate extends SearchDelegate{
 
-  final String titulo;
+  final List<ActividadesFisicas> todasAciti;
+   List<ActividadesFisicas> _filtro=[];
+  
 
   ActividadesSearchDelegate({
-    required this.titulo
+    required this.todasAciti
   });
   
 
@@ -169,7 +171,10 @@ class ActividadesSearchDelegate extends SearchDelegate{
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: SvgPicture.asset('assets/NUTRISALUD-NS.svg',),
+        child:  ListView.builder(
+     padding: const EdgeInsets.all(10),
+     itemCount: todasAciti.length,
+      itemBuilder: ( _ , int index  ) =>  _ActividadesSugeridos(fisicas: todasAciti[index] )),
       ),
     );
   }
@@ -188,22 +193,16 @@ class ActividadesSearchDelegate extends SearchDelegate{
     if(query.isEmpty) {
       return _emptyContainer();
     }
-   final alimentosService = Provider.of<AlimentosService>(context, listen: false ); 
-   alimentosService.getSuggestionByQuery(query);
-    
-   return StreamBuilder(
-     stream: alimentosService.suggestionsStream,
-     builder: ( _ , AsyncSnapshot<List<Alimentos>> snapshot ){
-         
-        if (!snapshot.hasData) return _emptyContainer(); 
-        final alimentos= snapshot.data!;
-        if(alimentos.isEmpty) return _noRespContainer(); 
-        return ListView.builder(
-          padding: const EdgeInsets.all(10),
-          itemCount: alimentos.length,
-          itemBuilder: ( _ , int index  ) =>  _ActividadesSugeridos(alimento: alimentos[index] ));
+    _filtro=todasAciti.where((element) {
+     return element.nombre.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+    if(_filtro.isEmpty) return _noRespContainer(); 
+     return ListView.builder(
+     padding: const EdgeInsets.all(10),
+     itemCount: _filtro.length,
+      itemBuilder: ( _ , int index  ) =>  _ActividadesSugeridos(fisicas: _filtro[index] ));
 
-     });  
+       
 
   }
   
@@ -211,26 +210,26 @@ class ActividadesSearchDelegate extends SearchDelegate{
 
 class _ActividadesSugeridos extends StatelessWidget {
 
-   final Alimentos alimento;
+   final ActividadesFisicas fisicas;
  
   const _ActividadesSugeridos({
     Key? key, 
-    required this.alimento,
+    required this.fisicas,
    
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-     String rutaFile="";
-   switch (alimento.semaforo) {
-       case "1":
-          rutaFile=alimento.file+' A.svg';
+     String rutaFile='';
+  switch (fisicas.typeactivity) {
+       case 1:
+          rutaFile='assets/EXC.svg';
          break;
-       case "2":
-         rutaFile=alimento.file+' B.svg';
+       case 2:
+         rutaFile='assets/SPORTS.svg';
         break;
-       case "3":
-          rutaFile=alimento.file+' C.svg';
+       case 3:
+          rutaFile='assets/WORK.svg';
          break;   
      }
     return Padding(
@@ -238,13 +237,18 @@ class _ActividadesSugeridos extends StatelessWidget {
       child: Container(
             decoration: BoxDecoration(border: Border.all(color: Colors.black),borderRadius: BorderRadius.circular(0), color: Colors.grey[200]),
             child: ListTile(
-               onTap: () => Navigator.pushNamed(context, 'detalleAli', arguments: alimento),
+               onTap: () => Navigator.pushNamed(context, 'actividadesDetalles', arguments: fisicas),
               contentPadding:const EdgeInsets.only(left: 5,right: 2,top: 2,bottom: 2),
               dense: true,
-              
-              title: Text(alimento.nombre, style: const TextStyle( fontSize: 14)),
-              subtitle: Text('cal: '+alimento.calorias.toString()+'; pro: '+alimento.proteina.toString() +'; car: '+alimento.carbohidrato.toString()+'; lips: '+alimento.lipids.toString() , style: const TextStyle(fontSize: 10)),
-              leading: SvgPicture.asset(rutaFile,height: 40, width: 40,),
+              trailing:const Padding(
+                padding: EdgeInsets.all(8),
+                child: Icon(Icons.arrow_forward_ios),
+              ),
+              title: Text(fisicas.nombre, style: const TextStyle( fontSize: 14)),
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: SvgPicture.asset(rutaFile,height: 30, width: 30, color: Colors.green,),
+              ),
             ),
           ),
     );

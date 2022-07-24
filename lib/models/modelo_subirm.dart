@@ -14,10 +14,10 @@ class ModelosSubirm {
     int idUsers;
     int idPhysicalMeasures;
     int beforeAfter;
-    int value;
+    double value;
     String measureDate;
     String measureTime;
-    int valueAlt;
+    double valueAlt;
 
     factory ModelosSubirm.fromJson(String str) => ModelosSubirm.fromMap(json.decode(str));
     
