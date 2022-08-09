@@ -306,7 +306,7 @@ class _CuerpoListBuil extends StatelessWidget {
             contentPadding:const EdgeInsets.only(left: 5,right: 2,top: 2,bottom: 2),
             dense: true,
             title: Text(aux[index].nombre,style: const TextStyle(fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,),
-            subtitle: Text('cal: '+aux[index].calorias.toString()+' grs: '+aux[index].lipids.toString()+' pro: '+aux[index].proteina.toString() +' car: '+aux[index].carbohidrato.toString() , style: const TextStyle(fontSize: 10)),
+            subtitle: Text('cal: '+(aux[index].calorias*aux[index].amount/100).toStringAsFixed(2)+' pro: '+(aux[index].proteina*aux[index].amount/100).toStringAsFixed(2) +' car: '+(aux[index].carbohidrato*aux[index].amount/100).toStringAsFixed(2) +' lips: '+(aux[index].lipids*aux[index].amount/100).toStringAsFixed(2), style: const TextStyle(fontSize: 10)),
             leading: SvgPicture.asset(rutaFile,height: 40, width: 40,),
             trailing: IconButton( 
               padding: const EdgeInsets.only(right: 3),

@@ -277,11 +277,12 @@ List<charts.Series<Expenses, String>> series = [
             series,
             barGroupingType: charts.BarGroupingType.stacked,
             customSeriesRenderers: [
-           charts.BarTargetLineRendererConfig<String>(
+            charts.BarTargetLineRendererConfig<String>(
               // ID used to link series to this renderer.
               customRendererId: 'customTargetLine',
               groupingType: charts.BarGroupingType.stacked)
-        ],
+            ],
+            domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.SmallTickRendererSpec(labelRotation: 60, labelStyle: charts.TextStyleSpec(fontSize: 10))),
             selectionModels: [
               charts.SelectionModelConfig(
                 changedListener: (charts.SelectionModel model){

@@ -20,87 +20,93 @@ class ValoresPersonalesScreen extends StatelessWidget {
     final medidasService = Provider.of<MedidasService>(context, listen: false); 
     final generalProvider = Provider.of<GeneralProvider>(context, listen: false);  
     String valor='';
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primary,
-        centerTitle: true,
-        title: SvgPicture.asset("assets/NUTRISALUD-NS.svg", width: 150,color: Colors.white,),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-         child:Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-        child:  Column(
-          children: [
-           const SizedBox(height: 20),
-           const FechaValores(),
-           const SizedBox(height: 20),
-           SizedBox(
-            
-            width: double.infinity,
-            child: Column(
-              children: [
-                const Center(child: AutoSizeText('Valores Control',style: TextStyle(fontSize: 20))),
-                ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder:(context, index) => ListTile(
-                  trailing: const Icon(Icons.arrow_forward_ios_outlined),
-                  leading: const Icon(Icons.circle_outlined),
-                  title:  Text(valores[index]), 
-                   onTap:() async {
-                    valor=Preferences.idUs.toString();
-                    generalProvider.medidasHistico.clear();  
-                    if(index==0){
-                     valor=valor+'/5';
-                     generalProvider.medidasHistico.addAll(await medidasService.historialMedidas(valor));
-                     generalProvider.llenarGraficas();
-                     Navigator.of(context).push(
-                     MaterialPageRoute(builder: (context)=> const TensionScreen()),
-                     );}
-                     else
-                     if(index==1){
-                     valor=valor+'/4';
-                     generalProvider.medidasHistico.addAll(await medidasService.historialMedidas(valor)); 
-                     generalProvider.llenarGraficasGlu();
-                     Navigator.of(context).push(
-                     MaterialPageRoute(builder: (context)=> const GlucosaScreen()),
-                     );}
-                    },
-                  ),
-                  separatorBuilder:((_,__)=> const Divider()), 
-                  itemCount: valores.length-1
-                  )
-              ],
-            )
-            ),
-           const SizedBox(height: 10),
-           SizedBox(
-         
-            width: double.infinity,
-            child:  Column(
-              children: [
-                const Center(child:AutoSizeText('Medidas Fisicas',style: TextStyle(fontSize: 20))),
-                ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder:(context, index) => ListTile(
-                  trailing: const Icon(Icons.arrow_forward_ios_outlined),
-                   onTap:(){
-                     Navigator.of(context).push(
-                     MaterialPageRoute(builder: (context)=> const ValoresScreen()),);},
-                  leading: const Icon(Icons.circle_outlined),
-                  title:  Text(valores[2]), ),
-                  separatorBuilder:((_,__)=> const Divider()), 
-                  itemCount: 1
-               )
-              ],
-            )),
+    return WillPopScope(
+      onWillPop: () async{
+        Navigator.pushReplacementNamed(context, 'home');
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppTheme.primary,
+          centerTitle: true,
+          title: SvgPicture.asset("assets/NUTRISALUD-NS.svg", width: 150,color: Colors.white,),
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
+           child:Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+          child:  Column(
+            children: [
+             const SizedBox(height: 20),
+             const FechaValores(),
+             const SizedBox(height: 20),
+             SizedBox(
+              
+              width: double.infinity,
+              child: Column(
+                children: [
+                  const Center(child: AutoSizeText('Valores Control',style: TextStyle(fontSize: 20))),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    itemBuilder:(context, index) => ListTile(
+                    trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                    leading: const Icon(Icons.circle_outlined),
+                    title:  Text(valores[index]), 
+                     onTap:() async {
+                      valor=Preferences.idUs.toString();
+                      generalProvider.medidasHistico.clear();  
+                      if(index==0){
+                       valor=valor+'/5';
+                       generalProvider.medidasHistico.addAll(await medidasService.historialMedidas(valor));
+                       generalProvider.llenarGraficas();
+                       Navigator.of(context).push(
+                       MaterialPageRoute(builder: (context)=> const TensionScreen()),
+                       );}
+                       else
+                       if(index==1){
+                       valor=valor+'/4';
+                       generalProvider.medidasHistico.addAll(await medidasService.historialMedidas(valor)); 
+                       generalProvider.llenarGraficasGlu();
+                       Navigator.of(context).push(
+                       MaterialPageRoute(builder: (context)=> const GlucosaScreen()),
+                       );}
+                      },
+                    ),
+                    separatorBuilder:((_,__)=> const Divider()), 
+                    itemCount: valores.length-1
+                    )
+                ],
+              )
+              ),
+             const SizedBox(height: 10),
+             SizedBox(
            
+              width: double.infinity,
+              child:  Column(
+                children: [
+                  const Center(child:AutoSizeText('Medidas Fisicas',style: TextStyle(fontSize: 20))),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    itemBuilder:(context, index) => ListTile(
+                    trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                     onTap:(){
+                       Navigator.of(context).push(
+                       MaterialPageRoute(builder: (context)=> const ValoresScreen()),);},
+                    leading: const Icon(Icons.circle_outlined),
+                    title:  Text(valores[2]), ),
+                    separatorBuilder:((_,__)=> const Divider()), 
+                    itemCount: 1
+                 )
+                ],
+              )),
              
-          ],
-        )
-        )
-
-
+               
+            ],
+          )
+          )
+    
+    
+        ),
       ),
     );
      

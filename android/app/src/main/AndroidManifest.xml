@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nutri_saludapp">
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="NutriSalud"
         android:icon="@mipmap/launcher_icon">

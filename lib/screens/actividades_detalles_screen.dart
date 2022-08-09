@@ -172,7 +172,7 @@ class ActividadesDetallesScreen extends StatelessWidget {
              }*/
         },
         icon: const Icon(Icons.save),
-        label: const Text("Gargar"),),
+        label: const Text("Cargar"),),
         alignment: const Alignment(0.0,1)
         
         ), 

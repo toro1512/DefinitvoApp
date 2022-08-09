@@ -155,8 +155,8 @@ class GeneralProvider extends ChangeNotifier{
        data.clear();
        data2.clear();
        for(int i=0; i<medidasHistico.length; i++){
-        data.add(objetoExp(medidasHistico[i].measureDate.substring(5, 10),medidasHistico[i].measureTime.substring(0, 5),medidasHistico[i].valor));
-        data2.add(objetoExp(medidasHistico[i].measureDate.substring(5, 10),medidasHistico[i].measureTime.substring(0, 5),medidasHistico[i].valueAlt));
+        data.add(objetoExp(medidasHistico[i].measureDate.substring(5, 10),medidasHistico[i].measureTime.substring(0, 8),medidasHistico[i].valor));
+        data2.add(objetoExp(medidasHistico[i].measureDate.substring(5, 10),medidasHistico[i].measureTime.substring(0, 8),medidasHistico[i].valueAlt));
       }
  }
  void llenarGraficasGlu(){
@@ -174,12 +174,12 @@ class GeneralProvider extends ChangeNotifier{
  }
  Expenses objetoExp(String day, String hora, int medida){
    
-    Expenses _objet= Expenses('$day\n$hora', medida);
+    Expenses _objet= Expenses('$day / $hora', medida);
     return _objet;
  }
  ExpensesGli objetoExpGlu(String day, String hora, int medida, Color color){
    
-    ExpensesGli _objet= ExpensesGli('$day\n$hora', medida,charts.ColorUtil.fromDartColor(color));
+    ExpensesGli _objet= ExpensesGli('$day / $hora', medida,charts.ColorUtil.fromDartColor(color));
     return _objet;
  }
   void clearVectores(){

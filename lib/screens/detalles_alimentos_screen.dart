@@ -20,6 +20,7 @@ class DetallesAlimentosScreen extends StatelessWidget {
    final String  tituloS=generalProvider.tituloG;
    List<String>  itemsS = [];
    
+   
    void llenar(List<Tipo> lis){
         for (var name in lis) {
           itemsS.add(name.name);
@@ -59,123 +60,134 @@ class DetallesAlimentosScreen extends StatelessWidget {
    
 
      
-    return  Scaffold(
-        appBar: AppBar(
-        title: Text(tituloS),
-        centerTitle: true,
-        backgroundColor: AppTheme.primary
-        ),
-      body:  CuerpoBody(alimento: alimento), 
+    return  WillPopScope(
+      onWillPop: () async{
+        generalProvider.valorTextEdit=100;
+        generalProvider.cantidadControl.text="100";
+        return true;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+          title: Text(tituloS),
+          centerTitle: true,
+          backgroundColor: AppTheme.primary
+          ),
+        body:  CuerpoBody(alimento: alimento), 
+       
+        floatingActionButton: Align(
+          child: FloatingActionButton.extended(
+          backgroundColor: Colors.lightGreen, 
+          onPressed: () {
+               if(generalProvider.valorTextEdit!=0){
+                alimento.amount=alimento.amount*generalProvider.valorConversion*generalProvider.valorTextEdit;
+               aux.add(alimento);
+                generalProvider.valorTextEdit=100;
+                generalProvider.cantidadControl.text="100";
+               Navigator.pushReplacementNamed(context, 'alimentos', arguments: tituloS);
+               }
+               else{
+                ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(duration: Duration(seconds: 2),
+                content: Text("Necesita ingresar un Valor")));
+               }
+          },
+          icon: const Icon(Icons.save),
+          label: const Text("Cargar"),),
+          alignment: const Alignment(0.1,0.7)
+          
+          ),
+        bottomSheet: Container(
+          height: 80,
+          color: Colors.black12,
+          
+                 child: Row(
+                   children: [
+                     Expanded(
+                       flex: 4,
+                       child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                         child: Center(
+                            child: TextField(
+                                 controller: generalProvider.cantidadControl,
+                                 decoration: InputDecoration(
+                                 labelText: 'Cantidad',
+                                 isDense: true,
+                                 focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppTheme.primary)),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(5.0),
+                                     ),
+                    
+                    
+                                ),
+                                 textAlign:TextAlign.center,
+                     
+                                 keyboardType: const TextInputType.numberWithOptions(decimal: true),  
+                                 onChanged: (value) {
+                                      if(value.isNotEmpty)
+                                      {
+                                       generalProvider.valorTextEdit=double.parse(value);
+                                      
+                                      }
+                                      else{
+                                        generalProvider.valorTextEdit=0;
+                                        
+                                      }
+                                     generalProvider.notiCambios();  
+                                 },                
+                    
+                                 inputFormatters: [
+                                   FilteringTextInputFormatter.allow(RegExp(r'^(\d{0,4})?'))
+    
+                                 ],)
+                                 ),
+                            )
+                     ),
+                     Expanded(
+                        flex: 6, 
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: DropdownButtonFormField<String>(
+                            onTap: (){  },
+                            value: selectedValue,
+                            
+                            decoration: const InputDecoration(
+                            border: OutlineInputBorder( gapPadding: 0,borderRadius: BorderRadius.only(bottomRight:Radius.circular(10), bottomLeft: Radius.circular(10)),), 
+                            labelText: 'Unidad a Consumir',                
+                            ),
+                            onChanged: ( newValue){
+                               selectedValue = newValue!;
+                               posicionC=generalProvider.tipoSolido.indexWhere((element) => element.name==selectedValue) ;
+                                if (posicionC==-1){
+                                  posicionC=generalProvider.tipoLiquido.indexWhere((element) => element.name==selectedValue) ;  
+                                  generalProvider.valorConversion=generalProvider.tipoLiquido[posicionC].vConversion;
+                                  generalProvider.cantidadControl.text=generalProvider.tipoLiquido[posicionC].vInicial.toString();
+                                }
+                                else{
+                                  generalProvider.valorConversion=generalProvider.tipoSolido[posicionC].vConversion;
+                                  generalProvider.cantidadControl.text=generalProvider.tipoSolido[posicionC].vInicial.toString();
+                                }
+                               
+                               generalProvider.valorTextEdit=double.parse(generalProvider.cantidadControl.text);
+                               if(generalProvider.cantidadControl.text.isNotEmpty)
+                                  {generalProvider.notiCambios();}
+                               
+                              },
+                               items: itemsS.map<DropdownMenuItem<String>>(
+                               (String value) => DropdownMenuItem<String>(
+                                     value: value,
+                                     child: Text(value),
+                                   ))
+                                  .toList(),
+                                icon:const Icon(Icons.arrow_drop_down),
+                                iconSize: 30,
+                           ),
+                      ),
+                    )
+                   ],
+                 )
+               ),
      
-      floatingActionButton: Align(
-        child: FloatingActionButton.extended(
-        backgroundColor: Colors.lightGreen, 
-        onPressed: () {
-             if(generalProvider.valorTextEdit!=0){
-              alimento.amount=alimento.amount*generalProvider.valorConversion*generalProvider.valorTextEdit;
-             aux.add(alimento);
-             Navigator.pushReplacementNamed(context, 'alimentos', arguments: tituloS);
-             }
-             else{
-              ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(duration: Duration(seconds: 2),
-              content: Text("Necesita ingresar un Valor")));
-             }
-        },
-        icon: const Icon(Icons.save),
-        label: const Text("Gargar"),),
-        alignment: const Alignment(0.1,0.7)
-        
-        ),
-      bottomSheet: Container(
-        height: 80,
-        color: Colors.black12,
-        
-               child: Row(
-                 children: [
-                   Expanded(
-                     flex: 4,
-                     child: Padding(
-                     padding: const EdgeInsets.all(8.0),
-                       child: Center(
-                          child: TextField(
-                               controller: generalProvider.cantidadControl,
-                               decoration: InputDecoration(
-                               labelText: 'Cantidad',
-                               isDense: true,
-                               focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: AppTheme.primary)),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(5.0),
-                                   ),
-                  
-                  
-                              ),
-                               textAlign:TextAlign.center,
-                   
-                               keyboardType: const TextInputType.numberWithOptions(decimal: true),  
-                               onChanged: (value) {
-                                    if(value.isNotEmpty)
-                                    {
-                                     generalProvider.valorTextEdit=double.parse(value);
-                                     generalProvider.notiCambios();
-                                    }
-                                    else{
-                                      generalProvider.valorTextEdit=0;
-                                    }
-                                    
-                               },                
-                  
-                               inputFormatters: [
-                                 FilteringTextInputFormatter.allow(RegExp(r'^(\d{0,4})?'))
-
-                               ],)
-                               ),
-                          )
-                   ),
-                   Expanded(
-                      flex: 6, 
-                      child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropdownButtonFormField<String>(
-                          onTap: (){  },
-                          value: selectedValue,
-                          decoration: const InputDecoration(
-                          border: OutlineInputBorder( gapPadding: 0,borderRadius: BorderRadius.only(bottomRight:Radius.circular(10), bottomLeft: Radius.circular(10)),), 
-                          labelText: 'Unidad a Consumir',                
-                          ),
-                          onChanged: ( newValue){
-                             selectedValue = newValue!;
-                             posicionC=generalProvider.tipoSolido.indexWhere((element) => element.name==selectedValue) ;
-                              if (posicionC==-1){
-                                posicionC=generalProvider.tipoLiquido.indexWhere((element) => element.name==selectedValue) ;  
-                                generalProvider.valorConversion=generalProvider.tipoLiquido[posicionC].vConversion;
-                                generalProvider.cantidadControl.text=generalProvider.tipoLiquido[posicionC].vInicial.toString();
-                              }
-                              else{
-                                generalProvider.valorConversion=generalProvider.tipoSolido[posicionC].vConversion;
-                                generalProvider.cantidadControl.text=generalProvider.tipoSolido[posicionC].vInicial.toString();
-                              }
-                             
-                             generalProvider.valorTextEdit=double.parse(generalProvider.cantidadControl.text);
-                             if(generalProvider.cantidadControl.text.isNotEmpty)
-                                {generalProvider.notiCambios();}
-                             
-                            },
-                             items: itemsS.map<DropdownMenuItem<String>>(
-                             (String value) => DropdownMenuItem<String>(
-                                   value: value,
-                                   child: Text(value),
-                                 ))
-                                .toList(),
-                              icon:const Icon(Icons.arrow_drop_down),
-                              iconSize: 30,
-                         ),
-                    ),
-                  )
-                 ],
-               )
-             ),
- 
+      ),
     );
   }
 }
@@ -233,25 +245,25 @@ class CuerpoBody extends StatelessWidget {
             TableRow(
               children:[ 
                 const _EtiquetaTabla(valorEti:'Carbohidratos en la porcion: '),
-                _EtiquetaTabla(valorEti: (alimento.carbohidrato*generalProvider.valorConversion*generalProvider.valorTextEdit).toString()+' gr') 
+                _EtiquetaTabla(valorEti: (alimento.carbohidrato*generalProvider.valorConversion*generalProvider.valorTextEdit).toStringAsFixed(2)+' gr') 
               ]
             ),
             TableRow(
               children:[ 
                 const _EtiquetaTabla(valorEti:'KCalorias en la porcion: '),
-                _EtiquetaTabla(valorEti: (alimento.calorias*generalProvider.valorConversion*generalProvider.valorTextEdit).toString()+' gr') 
+                _EtiquetaTabla(valorEti: (alimento.calorias*generalProvider.valorConversion*generalProvider.valorTextEdit).toStringAsFixed(2)+' gr') 
               ]
             ),
              TableRow(
               children:[ 
                  const _EtiquetaTabla(valorEti:'Grasas en la porcion: '),
-                _EtiquetaTabla(valorEti:(alimento.lipids*generalProvider.valorConversion*generalProvider.valorTextEdit).toString()+ ' gr') 
+                _EtiquetaTabla(valorEti:(alimento.lipids*generalProvider.valorConversion*generalProvider.valorTextEdit).toStringAsFixed(2)+ ' gr') 
               ]
             ),
             TableRow(
               children:[ 
                 const _EtiquetaTabla(valorEti:'Proteinas en la porcion: '),
-                _EtiquetaTabla(valorEti: (alimento.proteina*generalProvider.valorConversion*generalProvider.valorTextEdit).toString()+' gr') 
+                _EtiquetaTabla(valorEti: (alimento.proteina*generalProvider.valorConversion*generalProvider.valorTextEdit).toStringAsFixed(2)+' gr') 
               ]
             )
           ],),//Flexible

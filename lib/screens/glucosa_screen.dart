@@ -240,6 +240,7 @@ class ConstruirGraficag extends StatelessWidget{
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: charts.BarChart(
+          
             series,
             barGroupingType: charts.BarGroupingType.stacked,
             customSeriesRenderers: [
@@ -248,7 +249,7 @@ class ConstruirGraficag extends StatelessWidget{
               customRendererId: 'customTargetLine',
               groupingType: charts.BarGroupingType.stacked)
         ],
-            
+             domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.SmallTickRendererSpec(labelRotation: 60, labelStyle: charts.TextStyleSpec(fontSize: 10))),
             selectionModels: [
               charts.SelectionModelConfig(
                 changedListener: (charts.SelectionModel model){
