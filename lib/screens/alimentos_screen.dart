@@ -101,7 +101,7 @@ class AlimentosScreen extends StatelessWidget {
                         const  SizedBox(height: 10),
                          Text('Tu '+_titulo+' es:', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: Colors.black) ),
                          Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                           child: SizedBox(
                             height: 220,
                             child: ListView.builder(
@@ -140,14 +140,39 @@ class AlimentosScreen extends StatelessWidget {
                onPressed: () async{
               
                   llenarEnvio(cargaComida,aux, generalProvider,_idComida);
+                  double sumaCargaComida=sumarComida(cargaComida);
                   final String? respuesta=await alimentosService.insertarComidas(cargaComida);
                       if(respuesta=="registro exitoso"){
+                         generalProvider.caloriasCon=generalProvider.caloriasCon+sumaCargaComida;
+                         generalProvider.llenarGraficasCircular(generalProvider.caloriasQue,generalProvider.caloriasCon);
+                         for(int i=0; i<aux.length;i++){
+                          switch(_idComida) {
+           case 1:
+            generalProvider.desLisDay.add(actuComidadCargad(aux[i],"Desayuno"));
+            break;
+           case 2: 
+            generalProvider.almLisDay.add(actuComidadCargad(aux[i],"Amuerzo"));
+            break;
+           case 3: 
+            generalProvider.cenLisDay.add(actuComidadCargad(aux[i],"Cena"));
+            break;
+           case 4: 
+            generalProvider.merLisDay.add(actuComidadCargad(aux[i],"Desayuno"));
+            break;
+   
+      }
+      }
                          cargaComida.clear();
                          aux.clear();
                          ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(duration: const Duration(seconds: 2),
                           content: Text(_titulo+" Cargado")));
                          generalProvider.notiCambios();
+                        }else{
+                          ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(duration: Duration(seconds: 2),
+                          content: Text("Error en Carga")));
+                         
                         }
 
                },
@@ -182,7 +207,7 @@ class AlimentosScreen extends StatelessWidget {
   void llenarEnvio(List<ModelosSubirc> cargaComida, List<Alimentos> aux, GeneralProvider generalProvider, int idComida) {
 
       for(int i=0; i<aux.length;i++){
-        ModelosSubirc _obj= ModelosSubirc (amount: aux[i].amount, idFood: aux[i].id, fecha: generalProvider.fechaC, idFoodMoment: idComida, idUser: Preferences.idUs);
+             ModelosSubirc _obj= ModelosSubirc (amount: aux[i].amount, idFood: aux[i].id, fecha: generalProvider.fechaC, idFoodMoment: idComida, idUser: Preferences.idUs);
         cargaComida.add(_obj);
         }
       
@@ -190,6 +215,21 @@ class AlimentosScreen extends StatelessWidget {
 
   }
 
+  AlimentosDia actuComidadCargad(Alimentos aux, String mometComi) {
+
+    AlimentosDia _cargaRa= AlimentosDia(moment: mometComi, food: aux.nombre, amount: aux.amount.round(), kcal: aux.calorias.round(), light: aux.semaforo);
+    return _cargaRa;
+  }
+
+}
+
+double sumarComida(List<ModelosSubirc> cargaComida) {
+  double xComida=0;
+    for (int i=0;i<cargaComida.length;i++){
+        xComida=xComida+cargaComida[i].amount;
+    }
+
+  return xComida;
 }  
 
 class _CuerpoSugerencias extends StatelessWidget {
@@ -229,7 +269,6 @@ class _CuerpoSugerencias extends StatelessWidget {
         decoration: BoxDecoration(border: Border.all(color: Colors.black),borderRadius: BorderRadius.circular(0), color: Colors.grey[200]),
         child: ListTile(
           onTap: () => Navigator.pushNamed(context, 'detalleAli', arguments: auxSuger[index]),
-          contentPadding: const EdgeInsets.only(left: 5,right: 2,top: 2,bottom: 2),
           dense: false,
           title:  Stack(
               children: <Widget>[
@@ -249,6 +288,7 @@ class _CuerpoSugerencias extends StatelessWidget {
             padding: const EdgeInsets.only(right: 3),
             alignment: Alignment.centerRight,
             icon: const Icon(Icons.add_circle, color: AppTheme.primary,), onPressed: (){
+              auxSuger[index].amount=auxSuger[index].calorias;
               aux.add(auxSuger[index]);
               generalProvider.notiCambios();
             },),

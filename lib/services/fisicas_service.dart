@@ -42,6 +42,34 @@ class FisicasService extends ChangeNotifier{
     final searchActividades= SearchActividades.fromJson(resp.body);
     return searchActividades.data; 
   }
+  Future <ValoresHistoria> caloriasConsu (String idU) async {
+    
+    final ValoresHistoria consumida;
+    final base='api/queries/ActividadesCon/'+idU;
+    final url= Uri.https(_baseUrl,base);
+    final resp = await http.get(url);
+    
+    consumida=ValoresHistoria.fromJson(resp.body);
+    return consumida; 
+  }
+  Future <ValoresHistoria> caloriasQuema(String idU) async {
+    
+    final ValoresHistoria consumida;
+    final base='api/queries/ActividadesQue/'+idU;
+    final url= Uri.https(_baseUrl,base);
+    final resp = await http.get(url);
+    
+    consumida=ValoresHistoria.fromJson(resp.body);
+    return consumida; 
+  }
+   Future < List<ActividadesFisicasC>> dayActividades (String query) async {
+    
+    final base='api/queries/ActividadesDay/'+query;
+    final url= Uri.https(_baseUrl,base);
+    final resp = await http.get(url);
+    final searchActividades= ListaFisica.fromJson(resp.body);
+    return searchActividades.data; 
+  }
 
   Future<String?> insertarFisicas (List<ModelosSubirf> dataM) async{
 

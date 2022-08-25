@@ -44,11 +44,8 @@ class DetallesAlimentosScreen extends StatelessWidget {
     }
    switch(alimento.grupo){
       
-        case "Leche y Derivados" :
-          llenar(generalProvider.tipoLiquido);
-          selectedValue = 'ml';
-          break;
-        case "Bebidas (Alcoholicas y No Alcoholicas)" :
+       
+        case "9" :
           llenar(generalProvider.tipoLiquido);
           selectedValue = 'ml';
           break;
@@ -78,12 +75,14 @@ class DetallesAlimentosScreen extends StatelessWidget {
           child: FloatingActionButton.extended(
           backgroundColor: Colors.lightGreen, 
           onPressed: () {
+                
                if(generalProvider.valorTextEdit!=0){
-                alimento.amount=alimento.amount*generalProvider.valorConversion*generalProvider.valorTextEdit;
-               aux.add(alimento);
+                aux.add(copiarAlimento(alimento,generalProvider.valorConversion,generalProvider.valorTextEdit));
                 generalProvider.valorTextEdit=100;
                 generalProvider.cantidadControl.text="100";
-               Navigator.pushReplacementNamed(context, 'alimentos', arguments: tituloS);
+                generalProvider.valorConversion=0.01;
+                generalProvider.notiCambios();
+                Navigator.pop(context);
                }
                else{
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -190,6 +189,17 @@ class DetallesAlimentosScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Alimentos copiarAlimento(Alimentos alimento, double valorConversion, double valorTextEdit) {
+double valorr;
+if(valorTextEdit==100){
+  valorr=100;
+}else{
+  valorr=(alimento.amount*valorConversion*valorTextEdit);
+}
+Alimentos _objet= Alimentos(id: alimento.id, grupo: alimento.grupo, nombre: alimento.nombre, proteina: alimento.proteina, carbohidrato: alimento.carbohidrato, lipids: alimento.lipids, calorias: alimento.calorias, file: alimento.file, semaforo: alimento.semaforo, amount:valorr);
+    return _objet;
 }
 
 

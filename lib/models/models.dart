@@ -13,6 +13,8 @@ export 'package:nutri_saludapp/models/expenses.dart';
 export 'package:nutri_saludapp/models/expenses_gli.dart';
 export 'package:nutri_saludapp/models/actividades_fisica.dart';
 export 'package:nutri_saludapp/models/search_actividades.dart';
-
-
+export 'package:nutri_saludapp/models/valores_historia.dart';
+export 'package:nutri_saludapp/models/calorias.dart';
+export 'package:nutri_saludapp/models/lista_fisicas.dart';
+export 'package:nutri_saludapp/models/actividades_fisicas_c.dart';
 

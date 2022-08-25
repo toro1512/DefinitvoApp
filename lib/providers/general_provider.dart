@@ -19,42 +19,43 @@ class GeneralProvider extends ChangeNotifier{
  List<Expenses> data=[];
  List<Expenses> data2=[];
  List<ExpensesGli> dataGlu=[];
+ List<Calorias> dataGrafiPri =[];
  
 
 
  
   List <Alimentos> almuerosSuge= [
-  Alimentos(id:274,grupo:"6",nombre:"Cerdo lomo horneado sin sal",proteina:35.1,carbohidrato:0,lipids:3.2,calorias:170, semaforo: "1", file: "assets/PLATO", amount: 100),
-  Alimentos(id:214,grupo:"6",nombre:"Res lomo cocido sin sal ",proteina:36.1,carbohidrato:0,lipids:7.9,calorias:218, semaforo: "2", file: "assets/PLATO", amount: 100),
-  Alimentos(id:94,grupo:"1",nombre:"Arroz blanco pulido cocido sin sal ",proteina:2.3,carbohidrato:30.9,lipids:2.1,calorias:161, semaforo:"1", file: "assets/PLATO", amount: 100),
-  Alimentos(id:214,grupo:"1",nombre:"Pasta alimenticia, con huevo, sin enriquecer, coci",proteina:4.5,carbohidrato:24.3,lipids:1,calorias:132, semaforo: "1", file: "assets/PLATO", amount: 100),
-  Alimentos(id:254,grupo:"2",nombre:"Yuca blanca sin cáscara cocida sin sal ",proteina:0.7,carbohidrato:33.9,lipids:0.2,calorias:157, semaforo: "2", file: "assets/PLATO", amount: 100),
-  Alimentos(id:34,grupo:"2",nombre:"Papa variedad cerosa sabanera con cáscara cocida s",proteina:2.3,carbohidrato:18.7,lipids:0.1,calorias:99, semaforo: "3", file: "assets/PLATO", amount: 100),
+  Alimentos(id:758,grupo:"5",nombre:"Cerdo lomo horneado sin sal",proteina:35.1,carbohidrato:0,lipids:3.2,calorias:170, semaforo: "2", file: "assets/CARNES", amount: 100),
+  Alimentos(id:852,grupo:"5",nombre:"Res lomo cocido sin sal",proteina:36.1,carbohidrato:0,lipids:7.9,calorias:218, semaforo: "2", file: "assets/CARNES", amount: 100),
+  Alimentos(id:390,grupo:"6",nombre:"Arroz blanco pulido cocido sin sal",proteina:2.3,carbohidrato:30.9,lipids:2.1,calorias:161, semaforo:"2", file: "assets/CEREALES", amount: 100),
+  Alimentos(id:452,grupo:"6",nombre:"Pasta alimenticia con huevo sin enriquecer cocida sin sal",proteina:4.5,carbohidrato:24.3,lipids:1,calorias:132, semaforo: "2", file: "assets/CEREALES", amount: 100),
+  Alimentos(id:576,grupo:"16",nombre:"Yuca blanca sin cáscara cocida sin sal ",proteina:0.7,carbohidrato:33.9,lipids:0.2,calorias:157, semaforo: "1", file: "assets/VERDURAS", amount: 100),
+  Alimentos(id:1050,grupo:"1",nombre:"Jute de papa criolla",proteina:2.3,carbohidrato:0,lipids:0,calorias:123, semaforo: "2", file: "assets/VERDURAS", amount: 100),
  ];
  List <Alimentos> desayunosSuge= [
-   Alimentos(nombre: "Huevo de gallina entero revuelto con sal",id:124,grupo:" 9" , proteina: 10.2, carbohidrato: 0,lipids: 11.4, calorias: 152, semaforo: "1", file: "assets/PLATO" , amount: 100),
-   Alimentos(nombre: "Huevo de gallina entero frito sin sal",id:114,grupo: "9" , proteina: 17.1, carbohidrato: 0,lipids: 14.6, calorias: 208, semaforo: "1", file: "assets/PLATO" , amount: 100),
-   Alimentos(id:154,grupo:"1",nombre:"Cereal para el desayuno hojuelas de maíz sin azúca ",proteina:8.1,carbohidrato:81.7,lipids:0.4,calorias:383, semaforo: "2", file: "assets/PLATO", amount: 100),
-   Alimentos(id:224,grupo:"1",nombre:"Pan blanco, regular, horneado",proteina:8.9,carbohidrato:45.6,lipids:3.4,calorias:268, semaforo: "1", file: "assets/PLATO", amount: 100),
-   Alimentos(id:144,grupo:"1",nombre:"Arepa de maíz precocido con sal ",proteina:3.3,carbohidrato:34.1,lipids:0.9,calorias:163, semaforo: "2", file: "assets/PLATO", amount: 100),
-   Alimentos(id:174,grupo:"1",nombre:"Arepa de maíz con queso asada",proteina:4.8,carbohidrato:0,lipids:8.4,calorias:211, semaforo: "1", file: "assets/PLATO", amount: 100),
-   Alimentos(id:184,grupo:"1",nombre:"Arepa de maíz frita ",proteina:3.4,carbohidrato:0,lipids:20.3,calorias:325, semaforo: "1", file: "assets/PLATO", amount: 100)
+   Alimentos(id:923,grupo:"10" ,nombre: "Huevo de gallina entero revuelto con sal", proteina: 10.2, carbohidrato: 0,lipids: 11.4, calorias: 152, semaforo: "1", file: "assets/LACTEOS" , amount: 100),
+   Alimentos(id:922,grupo: "10" ,nombre: "Huevo de gallina entero frito sin sal", proteina: 17.1, carbohidrato: 0,lipids: 14.6, calorias: 208, semaforo: "1", file: "assets/LACTEOS" , amount: 100),
+   Alimentos(id:396,grupo:"6",nombre:"Cereal para el desayuno hojuelas de maíz sin azúcar",proteina:8.1,carbohidrato:81.7,lipids:0.4,calorias:383, semaforo: "2", file: "assets/CEREALES", amount: 100),
+   Alimentos(id:441,grupo:"6",nombre:"Pan blanco regular horneado",proteina:8.9,carbohidrato:45.6,lipids:3.4,calorias:268, semaforo: "2", file: "assets/CEREALES", amount: 100),
+   Alimentos(id:385,grupo:"6",nombre:"Arepa de maíz precocido con sal ",proteina:3.3,carbohidrato:34.1,lipids:0.9,calorias:163, semaforo: "2", file: "assets/CEREALES", amount: 100),
+   Alimentos(id:388,grupo:"6",nombre:"Arepa de maíz con queso asada",proteina:4.8,carbohidrato:0,lipids:8.4,calorias:211, semaforo: "2", file: "assets/CEREALES", amount: 100),
+   Alimentos(id:389,grupo:"6",nombre:"Arepa de maíz frita ",proteina:3.4,carbohidrato:0,lipids:20.3,calorias:325, semaforo: "2", file: "assets/CEREALES", amount: 100)
  ];
  List <Alimentos> cenasSuge= [
-  Alimentos(id:184,grupo:"1",nombre:"Arepa de maíz frita ",proteina:3.4,carbohidrato:0,lipids:20.3,calorias:325, semaforo: "1", file: "assets/PLATO", amount: 100),
-  Alimentos(id:144,grupo:"1",nombre:"Arepa de maíz precocido con sal ",proteina:3.3,carbohidrato:34.1,lipids:0.9,calorias:163, semaforo: "1", file: "assets/PLATO", amount: 100),
-  Alimentos(id:144,grupo:"8",nombre:"Queso fresco blando magro tipo suero costeño",proteina:11,carbohidrato:0,lipids:1.5,calorias:83, semaforo: "1", file: "assets/PLATO", amount: 100),
-  Alimentos(id:74,grupo:"8",nombre:"Queso fresco semiduro semigraso tipo costeño",proteina:17.5,carbohidrato:0,lipids:25.5,calorias:303, semaforo: "2", file: "assets/PLATO", amount: 100),
-  Alimentos(id:64,grupo:"14",nombre:"Yogurt bebible descremado sin azucar",proteina:3.7,carbohidrato:7.9,lipids:0.3,calorias:49, semaforo: "1", file: "assets/PLATO", amount: 100),
-  Alimentos(id:84,grupo:"6",nombre:"Jamon de cerdo y res tipo sanduche precocido",proteina:11.4,carbohidrato:0,lipids:15.5,calorias:215, semaforo: "2", file: "assets/PLATO", amount: 100),
+   Alimentos(id:388,grupo:"6",nombre:"Arepa de maíz con queso asada",proteina:4.8,carbohidrato:0,lipids:8.4,calorias:211, semaforo: "2", file: "assets/CEREALES", amount: 100),
+   Alimentos(id:389,grupo:"6",nombre:"Arepa de maíz frita ",proteina:3.4,carbohidrato:0,lipids:20.3,calorias:325, semaforo: "2", file: "assets/CEREALES", amount: 100),
+   Alimentos(id:885,grupo:"9",nombre:"Queso fresco blando magro tipo suero costeño",proteina:11,carbohidrato:0,lipids:1.5,calorias:83, semaforo: "2", file: "assets/LIQUIDO", amount: 100),
+   Alimentos(id:888,grupo:"9",nombre:"Queso fresco semiduro semigraso tipo costeño",proteina:17.5,carbohidrato:0,lipids:25.5,calorias:303, semaforo: "2", file: "assets/LIQUIDO", amount: 100),
+   Alimentos(id:987,grupo:"3",nombre:"Yogurt bebible descremado sin azucar",proteina:3.7,carbohidrato:7.9,lipids:0.3,calorias:49, semaforo: "2", file: "assets/PLATO", amount: 100),
+   Alimentos(id:393,grupo:"6",nombre:"Avena en hojuelas precocida",proteina:16.9,carbohidrato:54.3,lipids:7.5,calorias:411, semaforo: "2", file: "assets/CEREALES", amount: 100),
  ];
  List <Alimentos> meriendasSuge= [
-  Alimentos(id:164, grupo:"1", nombre:"croissant de queso horneado", proteina:9.2, carbohidrato:46.3, lipids:23, calorias:445, semaforo: "2", file: "assets/PLATO", amount: 100),
-  Alimentos(id:254,grupo:"1",nombre:"Pan de queso, horneado",proteina:10.4,carbohidrato:31.4,lipids:20.8,calorias:367, semaforo: "3", file: "assets/PLATO", amount: 100),
-  Alimentos(id:374,grupo:"11",nombre:"Café soluble descafeinado en polvo",proteina:11.6,carbohidrato:80.7,lipids:0.2,calorias:371, semaforo: "3", file: "assets/PLATO", amount: 100),
-  Alimentos(id:204,grupo:"1",nombre:"Galletas dulces con relleno",proteina:3.8,carbohidrato:68.6,lipids:24.1,calorias:516, semaforo: "1", file: "assets/PLATO", amount: 100),
-  Alimentos(id:224,grupo:"1",nombre:"Galletas dulces de avena con uvas pasas",proteina:6.5,carbohidrato:66.1,lipids:16.2,calorias:451, semaforo: "1", file: "assets/PLATO", amount: 100),
-  Alimentos(id:174,grupo:"14",nombre:"Yogurt bebible semidescremado con azucar",proteina:4,carbohidrato:17.8,lipids:1.1,calorias:99, semaforo: "1", file: "assets/PLATO", amount: 100),
+  Alimentos(id:397, grupo:"6", nombre:"croissant de queso horneado", proteina:9.2, carbohidrato:46.3, lipids:23, calorias:445, semaforo: "2", file: "assets/CEREALES", amount: 100),
+  Alimentos(id:446,grupo:"6",nombre:"Pan de queso horneado",proteina:10.4,carbohidrato:31.4,lipids:20.8,calorias:367, semaforo: "2", file: "assets/CEREALES", amount: 100),
+  Alimentos(id:968,grupo:"13",nombre:"Café soluble descafeinado en polvo",proteina:11.6,carbohidrato:80.7,lipids:0.2,calorias:371, semaforo: "3", file: "assets/MISCELANEOS", amount: 100),
+  Alimentos(id:401,grupo:"6",nombre:"Galletas dulces con relleno",proteina:3.8,carbohidrato:68.6,lipids:24.1,calorias:516, semaforo: "2", file: "assets/CEREALES", amount: 100),
+  Alimentos(id:403,grupo:"6",nombre:"Galletas dulces de avena con uvas pasas",proteina:6.5,carbohidrato:66.1,lipids:16.2,calorias:451, semaforo: "2", file: "assets/CEREALES", amount: 100),
+  Alimentos(id:988,grupo:"3",nombre:"Yogurt bebible semidescremado con azucar",proteina:4,carbohidrato:17.8,lipids:1.1,calorias:99, semaforo: "2", file: "assets/PLATO", amount: 100),
  ];
 
  List<Tipo> tipoSolido=[
@@ -73,8 +74,8 @@ class GeneralProvider extends ChangeNotifier{
  final tensionBaja = TextEditingController();
  final axucarContr = TextEditingController();
  bool _antesComer=false;
- int _caloriasQue=0;
- int _caloriasCon=0;
+ double _caloriasQue=0;
+ double _caloriasCon=0;
  int _indexBottom = 0;
  String _tituloG="";
  String _fechaC="";
@@ -93,8 +94,8 @@ class GeneralProvider extends ChangeNotifier{
  bool get antesComer => _antesComer;
  int get indexBottom => _indexBottom;
  int get idUsuario => _idUsuario;
- int get caloriasQue => _caloriasQue;
- int get caloriasCon => _caloriasCon;
+ double get caloriasQue => _caloriasQue;
+ double get caloriasCon => _caloriasCon;
  double get valorConversion => _valorConversion;
  int get valorInicGarga => _valorInicGarga;
  List <Alimentos> get cenasList=> cenasLista;
@@ -158,6 +159,15 @@ class GeneralProvider extends ChangeNotifier{
         data.add(objetoExp(medidasHistico[i].measureDate.substring(5, 10),medidasHistico[i].measureTime.substring(0, 8),medidasHistico[i].valor));
         data2.add(objetoExp(medidasHistico[i].measureDate.substring(5, 10),medidasHistico[i].measureTime.substring(0, 8),medidasHistico[i].valueAlt));
       }
+ }
+ void llenarGraficasCircular(double queCalo, double conCalo){
+       dataGrafiPri.clear();
+       dataGrafiPri =[
+      Calorias('Quemadas',queCalo, Colors.lightGreen),
+      Calorias('Consumidas',conCalo, const Color.fromRGBO(234, 24, 77, 1)),
+        ];
+        notifyListeners();
+      
  }
  void llenarGraficasGlu(){
   Color colorB;

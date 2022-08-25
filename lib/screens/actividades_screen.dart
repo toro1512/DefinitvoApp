@@ -18,6 +18,7 @@ class ActividadesScreen extends StatelessWidget {
 
      final String _titulo = ModalRoute.of(context)!.settings.arguments as String;
      final actividadesProvider=Provider.of<ActividadesProvider>(context);
+     final generalProvider=Provider.of<GeneralProvider>(context);
       final fisicasService=Provider.of<FisicasService>(context);
       switch( _titulo ) {
 
@@ -121,8 +122,25 @@ class ActividadesScreen extends StatelessWidget {
                icon: const Icon(Icons.save), label: const Text('Guardar', style: TextStyle(fontSize: 16)),
                onPressed: () async {
                 llenarEnviofi(cargaFisica, actividadesProvider);
+                double sumaCargaFisica=sumarFisica(cargaFisica);
                 final String? respuesta=await fisicasService.insertarFisicas(cargaFisica);
                       if(respuesta=="registro exitoso"){
+                         generalProvider.caloriasQue=generalProvider.caloriasQue+sumaCargaFisica;
+                         generalProvider.llenarGraficasCircular(generalProvider.caloriasQue,generalProvider.caloriasCon);
+                         for(int i=0; i<actividadesProvider.actividadesAlDia.length;i++){
+                          switch(actividadesProvider.actividadesAlDia[i].typeactivity) {
+           case 1:
+            actividadesProvider.deportivasAlDia.add(actuActividadCargad(actividadesProvider.actividadesAlDia[i]));
+            break;
+           case 2: 
+            actividadesProvider.recreacionalesAlDia.add(actuActividadCargad(actividadesProvider.actividadesAlDia[i]));
+            break;
+           case 3: 
+            actividadesProvider.ocupacionalesAlDia.add(actuActividadCargad(actividadesProvider.actividadesAlDia[i]));
+            break;
+                          }    
+   
+      }
                         cargaFisica.clear();
                         actividadesProvider.actividadesAlDia.clear();
                          ScaffoldMessenger.of(context).showSnackBar(
@@ -131,20 +149,7 @@ class ActividadesScreen extends StatelessWidget {
                          actividadesProvider.notiCambiosac();
                       }
                } 
-                /* onPressed: () async{
-              
-                llenarEnvio(cargaComida,aux, generalProvider,_idComida);
-                  final String? respuesta=await alimentosService.insertarComidas(cargaComida);
-                      if(respuesta=="registro exitoso"){
-                         cargaComida.clear();
-                        actividadesProvider.actividadesAlDia.clear();
-                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(duration: const Duration(seconds: 2),
-                          content: Text(_titulo+" Cargado")));
-                         actividadesProvider.notiCambiosac();
-                        }
-
-               },*/
+               
                ),
                const Text('Sugerencias',style: TextStyle(
                    fontSize: 18,)),
@@ -169,9 +174,23 @@ class ActividadesScreen extends StatelessWidget {
   }
 }
 
+ActividadesFisicasC actuActividadCargad(ActividadesFisicas cargaFisica) {
+  ActividadesFisicasC _cargaActiv=ActividadesFisicasC(id: cargaFisica.id, nombre: cargaFisica.nombre, typeactivity: cargaFisica.typeactivity, met: cargaFisica.met, kquemadas: cargaFisica.kquemadas, intensities: cargaFisica.intensities);
+  return _cargaActiv;
+}
+
+double sumarFisica(List<ModelosSubirf> cargaFisica) {
+   double xFisica=0;
+    for (int i=0;i<cargaFisica.length;i++){
+        xFisica=xFisica+cargaFisica[i].calorias;
+    }
+
+  return xFisica;
+}
+
 void llenarEnviofi(List<ModelosSubirf> cargaFisica, ActividadesProvider actividadesProvider) {
    for(int i=0; i<actividadesProvider.actividadesAlDia.length;i++){
-        ModelosSubirf _obj=ModelosSubirf(user: Preferences.idUs, intensidad: actividadesProvider.actividadesAlDia[i].intensidad!, duracion: actividadesProvider.actividadesAlDia[i].duracion!, actividad: actividadesProvider.actividadesAlDia[i].id, day: actividadesProvider.fechaAc, calorias: actividadesProvider.actividadesAlDia[i].calorias!);
+        ModelosSubirf _obj=ModelosSubirf(user: Preferences.idUs, intensidad: actividadesProvider.actividadesAlDia[i].intensities!, duracion: actividadesProvider.actividadesAlDia[i].duration!, actividad: actividadesProvider.actividadesAlDia[i].id, day: actividadesProvider.fechaAc, calorias: actividadesProvider.actividadesAlDia[i].kquemadas!);
         cargaFisica.add(_obj);
         }
 }
@@ -221,7 +240,7 @@ class _CuerpoListBuil extends StatelessWidget {
             contentPadding:const EdgeInsets.only(left: 5,right: 2,top: 2,bottom: 2),
             dense: true,
             title: Text(actividadesProvider.actividadesAlDia[index].nombre,style: const TextStyle(fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,),
-            subtitle:Text('Kcalorias quemadas '+actividadesProvider.actividadesAlDia[index].calorias.toString(),maxLines: 1,overflow: TextOverflow.ellipsis,  ),
+            subtitle:Text('Kcalorias quemadas '+actividadesProvider.actividadesAlDia[index].kquemadas!.toStringAsFixed(2),maxLines: 1,overflow: TextOverflow.ellipsis,  ),
             leading: SvgPicture.asset(rutaFile,height: 40, width: 40,),
             trailing: IconButton( 
               padding: const EdgeInsets.only(right: 3),
@@ -286,7 +305,6 @@ class _CuerpoSugerencias extends StatelessWidget {
                 
              ],
             ),  
-          //Text(auxSuger[index].nombre,style: TextStyle(color: color),maxLines: 1,overflow: TextOverflow.ellipsis,  ),
           
           leading:SvgPicture.asset(rutaFile,height: 40, width: 40,color: Colors.green),
           trailing: const Icon( Icons.arrow_forward_ios),

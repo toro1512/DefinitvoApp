@@ -5,8 +5,8 @@
 
 import 'dart:convert';
 
-class ActividadesFisicas {
-    ActividadesFisicas({
+class ActividadesFisicasC {
+    ActividadesFisicasC({
         required this.id,
         required this.nombre,
         required this.typeactivity,
@@ -25,16 +25,18 @@ class ActividadesFisicas {
     int? intensities;
     
 
-    factory ActividadesFisicas.fromJson(String str) => ActividadesFisicas.fromMap(json.decode(str));
+    factory ActividadesFisicasC.fromJson(String str) => ActividadesFisicasC.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory ActividadesFisicas.fromMap(Map<String, dynamic> json) => ActividadesFisicas(
+    factory ActividadesFisicasC.fromMap(Map<String, dynamic> json) => ActividadesFisicasC(
         id: json["ID"],
         nombre: json["NOMBRE"],
         typeactivity: json["TYPEACTIVITY"],
         met: json["MET"].toDouble(),
-        
+        duration: json["DURATION"],
+        kquemadas: json["KQUEMADAS"].toDouble(),
+        intensities: json["INTENSITIES"],
     );
 
     Map<String, dynamic> toMap() => {
@@ -42,5 +44,8 @@ class ActividadesFisicas {
         "NOMBRE": nombre,
         "TYPEACTIVITY": typeactivity,
         "MET": met,
-          };
+        "DURATION": duration,
+        "KQUEMADAS": kquemadas,
+        "INTENSITIES": intensities,
+    };
 }

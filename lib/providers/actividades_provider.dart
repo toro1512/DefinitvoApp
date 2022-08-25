@@ -29,6 +29,10 @@ class ActividadesProvider extends ChangeNotifier {
   ];
   List <ActividadesFisicas> todasActividades=[];
   List <ActividadesFisicas> actividadesAlDia=[];
+  List <ActividadesFisicasC> actividadesAlDiaHecha=[];
+  List <ActividadesFisicasC> ocupacionalesAlDia=[];
+  List <ActividadesFisicasC> recreacionalesAlDia=[];
+  List <ActividadesFisicasC> deportivasAlDia=[];
 
 final duracionControl = TextEditingController();
 bool _intensidadAlta=false;
@@ -62,6 +66,12 @@ int get registrarInt => _registrarInt;
   set intensidadBaja(value) {
     _intensidadBaja = value;
      }
+ void clearVectoresActi(){
+  actividadesAlDiaHecha.clear();
+  deportivasAlDia.clear();
+  recreacionalesAlDia.clear();
+  ocupacionalesAlDia.clear();
+ }    
 
  void notiCambiosac(){
   notifyListeners();

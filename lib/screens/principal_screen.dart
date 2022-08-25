@@ -4,9 +4,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:nutri_saludapp/models/models.dart';
 import 'package:nutri_saludapp/providers/providers.dart';
 import 'package:nutri_saludapp/screens/screens.dart';
 import 'package:nutri_saludapp/services/services.dart';
+import 'package:nutri_saludapp/share_preferences/preferences.dart';
 import 'package:nutri_saludapp/themes/app_theme.dart';
 import 'package:nutri_saludapp/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -96,9 +98,7 @@ void _onSelected(BuildContext context, int item) {
   switch(item){
 
     case 0:
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context)=> const ValoresScreen()),
-      );
+    
       break;
      case 1:
        break;
@@ -120,6 +120,7 @@ class BodyHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
      final generalProvider=Provider.of<GeneralProvider>(context);
+      final actividadesProvider=Provider.of<ActividadesProvider>(context);
      final Size size= MediaQuery.of(context).size;
     
     return  SingleChildScrollView(
@@ -150,15 +151,16 @@ class BodyHome extends StatelessWidget {
              children: [
             
              const SizedBox(width:20), 
-             AutoSizeText(generalProvider.caloriasCon.toString() + '  ',style: const TextStyle(color: Colors.lightGreen, fontWeight: FontWeight.bold, fontSize: 16)),
-             Expanded(child: AutoSizeText('calorias consumidas el actual dia',style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.bold, fontSize:16),maxLines: 1)),
-            ]),
+             Expanded(child: AutoSizeText('historial calorias consumidas',style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.bold, fontSize:16),maxLines: 1)),
+             AutoSizeText(generalProvider.caloriasCon.toStringAsFixed(1) + '  ',style: const TextStyle(color: Color.fromRGBO(234, 24, 77, 1), fontWeight: FontWeight.bold, fontSize: 12)),
+                         ]),
             Row(
              
                children: [
                const SizedBox(width: 20,), 
-                AutoSizeText(generalProvider.caloriasQue.toString() + '  ',style: const TextStyle(color: Color.fromRGBO(234, 24, 77, 1), fontWeight: FontWeight.bold, fontSize: 16), textAlign: TextAlign.start,),
-               Expanded(child: AutoSizeText('calorias quemadas el actual dia',style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.bold, fontSize: 16),maxLines: 1)),
+                Expanded(child: AutoSizeText('historial calorias quemadas',style: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.bold, fontSize: 16),maxLines: 1)),
+                AutoSizeText(generalProvider.caloriasQue.toStringAsFixed(1) + '  ',style: const TextStyle(color: Colors.lightGreen, fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.start,),
+              
               ]),
             const SizedBox(height: 25),
             const CardTable(),
@@ -194,24 +196,23 @@ class BodyHome extends StatelessWidget {
                   child:Container(
                    padding: const EdgeInsets.symmetric(horizontal:5),
                    width: size.width*0.30,
-                   height: 100,
+                   height: 130,
                    decoration: BoxDecoration( color:const Color.fromRGBO(234, 24, 77, 1),borderRadius: BorderRadius.circular(10)),
                    child: 
                       Column(
                         children: [
-                          Expanded(flex:5,child: SvgPicture.asset("assets/EXC.svg",height: 40,width: 40, color: Colors.white)),
+                          Expanded(flex:4,child: SvgPicture.asset("assets/EXC.svg",height: 40,width: 40, color: Colors.white)),
                           const SizedBox(height: 1,),
                           const Expanded(flex:2,child: AutoSizeText('deportivas', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),maxLines:1, minFontSize:8 ), ),
                           const Divider(height: 3, thickness:2,),
-                          const Expanded( flex: 2,
-                           child:SizedBox(
-                              width: double.infinity,
-                              child: Center(
-                                child: AutoSizeText("Consumo 5 Kcal",
-                                style: TextStyle(color: Colors.white,fontSize: 12 ,fontWeight: FontWeight.normal),
-                                textAlign:TextAlign.center, maxLines:1, minFontSize:8)
-                               )
-                            )
+                          Expanded(
+                            flex:3,
+                            child: GestureDetector(
+                              onTap: (){
+                                showActividad(context, actividadesProvider, "Deportivas");
+                              },
+                              child: SvgPicture.asset("assets/INFO.svg",height: 30,width: 30,),
+                            ),
                           )
                         ],
                       ),
@@ -222,24 +223,23 @@ class BodyHome extends StatelessWidget {
                   child:Container(
                    padding: const EdgeInsets.symmetric(horizontal:5),
                    width: size.width*0.30,
-                   height: 100,
+                   height: 130,
                    decoration: BoxDecoration( color:const Color.fromRGBO(234, 24, 77, 1),borderRadius: BorderRadius.circular(10)),
                    child: 
                       Column(
                         children: [
-                          Expanded(flex:5,child: SvgPicture.asset("assets/WORK.svg",height: 40,width: 40, color: Colors.white)),
+                          Expanded(flex:4,child: SvgPicture.asset("assets/WORK.svg",height: 40,width: 40, color: Colors.white)),
                           const SizedBox(height: 1,),
                           const Expanded(flex:2,child: AutoSizeText('ocupacionales', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),maxLines:1, minFontSize:8), ),
                           const Divider(height: 3, thickness:2,),
-                          const Expanded( flex: 2,
-                           child:SizedBox(
-                              width: double.infinity,
-                              child: Center(
-                                child: AutoSizeText("Consumo 5 Kcal",
-                                style: TextStyle(color: Colors.white,fontSize: 12 ,fontWeight: FontWeight.normal),
-                                textAlign:TextAlign.center, maxLines:1, minFontSize:8)
-                               )
-                            )
+                          Expanded(
+                            flex:3,
+                            child: GestureDetector(
+                              onTap: (){
+                                showActividad(context, actividadesProvider, "Ocupacionales");
+                              },
+                              child: SvgPicture.asset("assets/INFO.svg",height: 30,width: 30,),
+                            ),
                           )
                         ],
                       ),
@@ -250,24 +250,23 @@ class BodyHome extends StatelessWidget {
                   child:Container(
                    padding: const EdgeInsets.symmetric(horizontal:5),
                    width: size.width*0.30,
-                   height: 100,
+                   height: 130,
                    decoration: BoxDecoration( color:const Color.fromRGBO(234, 24, 77, 1),borderRadius: BorderRadius.circular(10)),
                    child: 
                       Column(
                         children: [
-                          Expanded(flex:5,child: SvgPicture.asset("assets/SPORTS.svg",height: 40,width: 40, color: Colors.white)),
+                          Expanded(flex:4,child: SvgPicture.asset("assets/SPORTS.svg",height: 40,width: 40, color: Colors.white)),
                           const SizedBox(height: 1,),
                           const Expanded(flex:2,child: AutoSizeText('recreacionales', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),maxLines:1, minFontSize:10), ),
                           const Divider(height: 3, thickness:2,),
-                          const Expanded( flex: 2,
-                           child:SizedBox(
-                              width: double.infinity,
-                              child: Center(
-                                child: AutoSizeText("Consumo 5 Kcal",
-                                style: TextStyle(color: Colors.white,fontSize: 12 ,fontWeight: FontWeight.normal),
-                                textAlign:TextAlign.center, maxLines:1, minFontSize:8)
-                               )
-                            )
+                          Expanded(
+                            flex:3,
+                            child: GestureDetector(
+                              onTap: (){
+                                showActividad(context, actividadesProvider, "Recreacionales");
+                              },
+                              child: SvgPicture.asset("assets/INFO.svg",height: 30,width: 30,),
+                            ),
                           )
                         ],
                       ),
@@ -284,6 +283,89 @@ class BodyHome extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<dynamic> showActividad(BuildContext context, ActividadesProvider actividadesProvider, String text) {
+    List<ActividadesFisicasC> _aux =[];
+
+    
+    return showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              if(text=='Recreacionales'){
+                                _aux.clear();
+                                _aux=actividadesProvider.recreacionalesAlDia;
+                              }
+                              if(text=='Ocupacionales'){
+                                 _aux.clear();
+                                 _aux=actividadesProvider.ocupacionalesAlDia;
+                              }
+                              if(text=='Deportivas'){
+                               _aux.clear();
+                               _aux=actividadesProvider.deportivasAlDia; 
+                              }
+                              
+                              return AlertDialog(
+                                shape:const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                                titlePadding: const EdgeInsetsDirectional.only(start: 0, bottom: 0),
+                                title: Container(
+                                  width: double.infinity,
+                                  color: AppTheme.primary,
+                                  child: Center(child: Padding(
+                                    padding:  const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Text(text, textAlign:TextAlign.center,style:const TextStyle(color:Colors.white),),
+                                        const Text("cargado este dia", textAlign:TextAlign.center,style: TextStyle(color:Colors.white, fontSize: 8),),
+                                      ],
+                                    ),
+                                  )),
+                                  ),
+
+                                contentPadding: const EdgeInsetsDirectional.only(start: 0, bottom: 0),  
+                                content:
+                                
+                                 SizedBox(
+                                   height: 400.0, // Change as per your requirement
+                                   width: 300.0,
+                                   child: Column(
+                                    
+                                     children: [
+                                      if(_aux.isNotEmpty) ...[
+                                       SizedBox(
+                                        height: 390,
+                                         child: ListView.separated(
+                                      
+                                          separatorBuilder: (context, index) => const Divider(height: 10, color: Colors.lightGreen),
+                                          shrinkWrap: true,
+                                          itemCount: _aux.length,
+                                          itemBuilder: (BuildContext context, int index) {
+                                             return ListTile(
+                                              
+                                              title: Text(_aux[index].nombre),
+                                              subtitle: Text("quemaste " +_aux[index].kquemadas!.toStringAsFixed(2)+ " Kcal"),
+                                             );
+                                           },
+                                         ),
+                                       )
+                                       ,
+                                       const SizedBox(
+                                        height: 5,
+                                       )
+                                      ]
+                                      else ...[
+                                        const SizedBox(
+                                        height: 20,
+                                       ),
+                                        const Center(child: Text("No tiene registros este dia"),)
+                                      ]
+                                     ],
+                                   ),
+                                 )
+                              );
+                            });
+
   }
    
 }
@@ -314,6 +396,7 @@ void initState() {
     final listaService = Provider.of<AlimentosDayService>(context, listen: false);
     final generalProvider = Provider.of<GeneralProvider>(context, listen: false);
      final actividadesProvider = Provider.of<ActividadesProvider>(context, listen: false);
+      final actividadesService = Provider.of<FisicasService>(context, listen: false);
     const storage = FlutterSecureStorage();
 
     
@@ -322,11 +405,30 @@ void initState() {
     generalProvider.fechaC=fecha;
     actividadesProvider.fechaAc=fecha;
     String val=await storage.read(key: 'usuario') ?? '';
+    String val2;
     val="'"+val+"'/";
     fecha='"'+fecha+'"';
     val= val+fecha;
+    actividadesProvider.clearVectoresActi();
     generalProvider.clearVectores();
+    val2=Preferences.idUs.toString()+"/"+fecha;
     generalProvider.alimentosDay.addAll(await listaService.searchAlimentos(val)); 
+    actividadesProvider.actividadesAlDiaHecha.addAll(await actividadesService.dayActividades(val2));
+     for(int i=0;i<actividadesProvider.actividadesAlDiaHecha.length;i++)
+    {
+      switch(actividadesProvider.actividadesAlDiaHecha[i].typeactivity) {
+
+      case 1:
+        actividadesProvider.deportivasAlDia.add(actividadesProvider.actividadesAlDiaHecha[i]);
+        break;
+      case 2: 
+          actividadesProvider.recreacionalesAlDia.add(actividadesProvider.actividadesAlDiaHecha[i]);
+        break;
+      case 3: 
+         actividadesProvider.ocupacionalesAlDia.add(actividadesProvider.actividadesAlDiaHecha[i]);
+        break;
+      }
+    }
     for(int i=0;i<generalProvider.alimentosDay.length;i++)
     {
       switch(generalProvider.alimentosDay[i].moment ) {

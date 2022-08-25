@@ -27,7 +27,17 @@ class ActividadesDetallesScreen extends StatelessWidget {
             width:double.infinity,
             fit: BoxFit.cover,
             ),
+             Center(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal:5),
+                  decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppTheme.primary,), 
+                  child: Text(actividad.nombre, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white), maxLines: 1, overflow: TextOverflow.ellipsis,)),
+              ),
              const SizedBox(height: 10),
+            
          Padding(
           padding: const EdgeInsets.symmetric(vertical :3, horizontal: 12),
           child: Row(
@@ -56,12 +66,9 @@ class ActividadesDetallesScreen extends StatelessWidget {
                               ),
                               hintStyle: TextStyle(fontSize: 16, color: Colors.grey[300], )
                             ),
-                                                
                           ),
                 ),
-             
-
-            ]
+             ]
           ),
         ),
         SwitchListTile.adaptive(
@@ -133,12 +140,12 @@ class ActividadesDetallesScreen extends StatelessWidget {
         onPressed: () {
           if(actividadesProvider.registrarInt!=-1)
           {
-           
+       
            if(actividadesProvider.duracionControl.text.isNotEmpty){
-            actividad.duracion=int.parse(actividadesProvider.duracionControl.text);
-            actividad.intensidad=actividadesProvider.registrarInt;
-            actividad.calorias=int.parse(actividadesProvider.duracionControl.text)*actividad.met*Preferences.pesoUs*0.0175 ;
-            actividadesProvider.actividadesAlDia.add(actividad);
+            actividad.duration=int.parse(actividadesProvider.duracionControl.text);
+            actividad.intensities=actividadesProvider.registrarInt;
+            actividad.kquemadas=int.parse(actividadesProvider.duracionControl.text)*actividad.met*Preferences.pesoUs*0.0175 ;
+            actividadesProvider.actividadesAlDia.add(copiarActividad(actividad));
             actividadesProvider.registrarInt=-1;
             actividadesProvider.duracionControl.text="";
             actividadesProvider.intensidadAlta=false;
@@ -160,16 +167,7 @@ class ActividadesDetallesScreen extends StatelessWidget {
               const SnackBar(duration: Duration(seconds: 2),
               content: Text("Necesita ingresar una intensidad")));
            }
-          /*   if(generalProvider.valorTextEdit!=0){
-              alimento.amount=alimento.amount*generalProvider.valorConversion*generalProvider.valorTextEdit;
-             aux.add(alimento);
-             Navigator.pushReplacementNamed(context, 'alimentos', arguments: tituloS);
-             }
-             else{
-              ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(duration: Duration(seconds: 2),
-              content: Text("Necesita ingresar un Valor")));
-             }*/
+         
         },
         icon: const Icon(Icons.save),
         label: const Text("Cargar"),),
@@ -177,5 +175,11 @@ class ActividadesDetallesScreen extends StatelessWidget {
         
         ), 
     );
+  }
+
+  ActividadesFisicas copiarActividad(ActividadesFisicas actividad) {
+   ActividadesFisicas _obj=ActividadesFisicas(id: actividad.id, nombre: actividad.nombre, typeactivity: actividad.typeactivity, met: actividad.met, kquemadas: actividad.kquemadas, duration:actividad.duration, intensities: actividad.intensities);
+   return _obj;
+
   }
 }

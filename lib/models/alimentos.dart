@@ -13,7 +13,6 @@ class Alimentos {
         required this.semaforo,
         required this.amount,
        });
-
   
     int id;
     String grupo;

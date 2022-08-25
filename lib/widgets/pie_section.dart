@@ -1,19 +1,21 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:nutri_saludapp/models/models.dart';
+import 'package:nutri_saludapp/providers/providers.dart';
+import 'package:provider/provider.dart';
 
 class PieSection extends StatelessWidget {
   const PieSection({Key? key}) : super(key: key);
-static List<Calorias> data =[
-      Calorias('Quemadas',80.5, Colors.lightGreen),
-      Calorias('Consumidas',19.5, const Color.fromRGBO(234, 24, 77, 1)),
-
-  ];
+  
+ 
   @override
   Widget build(BuildContext context) {
+    final generalProvider = Provider.of<GeneralProvider>(context);
+   
     List<charts.Series<Calorias, String>> serie=[
       charts.Series(
-        data:data,
+        data:generalProvider.dataGrafiPri,
         id:"ResumenCalórico",
         domainFn: (Calorias pops,_)=> pops.name,
         measureFn: (Calorias pops,_)=> pops.percent,
@@ -35,11 +37,5 @@ static List<Calorias> data =[
             arcWidth: 25, startAngle: 1/ 5 * pi, arcLength: 10/ 5 * pi)));
   }
 }
-class Calorias {
-  final String name;
-  final double percent;
-  final Color  color;
 
-  Calorias(this.name, this.percent, this.color);
-}
 

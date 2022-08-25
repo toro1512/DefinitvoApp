@@ -19,7 +19,7 @@ final storage = const FlutterSecureStorage();
         "password": password,
         "role": 1
     };
-    final url = Uri.https(_baseUrl, '/api/login');  
+    final url = Uri.https(_baseUrl,'/api/login');  
      
     final resp = await http.post(url , headers: {"Content-Type": "application/json"} ,body: json.encode(regiData)); 
     final Map <String , dynamic> decodeResp = jsonDecode(resp.body);
